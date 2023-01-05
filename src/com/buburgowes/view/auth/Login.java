@@ -2,32 +2,29 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.buburgowes;
+package com.buburgowes.view.auth;
 
-import java.awt.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import javax.swing.JOptionPane;
-
-import com.buburgowes.controller.DBConn;
+import com.buburgowes.controller.auth.AuthController;
 
 /**
- * @author Sayyidusy
+ * @author BuburGowes
  */
 public class Login extends javax.swing.JFrame {
 
+    private final AuthController buburGowes = new AuthController();
 
-    DBConn db = new DBConn();
 
     /**
      * Creates new form Login
      */
     public Login() {
-        Bubur.isLogin = false;
-        initComponents();
+
+        if (buburGowes.checkDBConnection(this)) {
+            this.setTitle("Login");
+            initComponents();
+        } else {
+            System.exit(0);
+        }
     }
 
     /**
@@ -236,69 +233,26 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void labelToDaftarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelToDaftarMouseClicked
-        new Register().setVisible(true);
+        Register app = new Register();
+
         this.dispose();
+        app.setVisible(true);
     }//GEN-LAST:event_labelToDaftarMouseClicked
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:\
-        String username = tfLoginUsername.getText();
-        String password = String.valueOf(tfLoginPassword.getPassword());
-
-        String query = "SELECT * FROM users WHERE username = ? AND password = ?";
+        String name = tfLoginUsername.getText();
+        String pass = String.valueOf(tfLoginPassword.getPassword());
 
         try {
-            String user = "";
-            Connection conn = db.dbConnection();
-
-            //Cek apakah username ada atau tidak
-            PreparedStatement ps = conn.prepareStatement(query);
-            ps.setString(1, username);
-            ps.setString(2, password);
-
-            ResultSet rs = ps.executeQuery();
-
-            /* while (rs.next()) {
-                user = rs.getString("username");
-                usernameList.add(user);
-
-            }*/
-
- /* usernameList.forEach((it) -> {
-                if (!it.equals(username) && !it.equals(Password)) {
-                    JOptionPane.showMessageDialog(null, "Username atau Password Salah");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Login Berhasil");
-                    jTabbedPane1.setSelectedIndex(0);
-                }
-            });*/
-
-            // syarat login berhasil jika username dan password ada di database
-
-            if (username.equals("") || password.equals("")) {
-                JOptionPane.showMessageDialog(null, "Username atau Password Salah");
-            } else if (password.length() < 8) {
-                JOptionPane.showMessageDialog(null, "Username atau Password Salah");
-            } else if (rs.next()) {
-                if (username.equals(rs.getString("username")) && password.equals(rs.getString("password"))) {
-                    JOptionPane.showMessageDialog(null, "Login Berhasil");
-                    Bubur.isLogin = true;
-                    this.setVisible(false);
-                    new Bubur().setVisible(true);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Username atau Password Salah");
-                }
-            }
-        } catch (SQLException e) {
+            buburGowes.userLogin(this, this, name, pass);
+        } catch (Exception e) {
             System.out.println(e.getMessage());
-
         }
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void jLabelCloseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelCloseMouseClicked
         // TODO add your handling code here:
-        new Bubur().setVisible(true);
-        this.dispose();
     }//GEN-LAST:event_jLabelCloseMouseClicked
 
     /**
@@ -331,7 +285,8 @@ public class Login extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Login().setVisible(true);
+                Login login = new Login();
+                login.setVisible(true);
             }
         });
     }

@@ -2,49 +2,77 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.buburgowes;
+package com.buburgowes.view.customer;
 
 /**
  *
- * @author Sayyidusy
+ * @author BuburGowes
  */
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
+import com.buburgowes.controller.CustomerController;
+
 import javax.swing.table.DefaultTableModel;
 
-public class Bubur extends javax.swing.JFrame {
+public class CustomerMain extends javax.swing.JFrame {
 
     /**
-     * Creates new form Bubur
+     * Creates new form CustomerMain
      */
+    private final CustomerController buburGowes = new CustomerController();
+    private static String current_user = "";
     DefaultTableModel model;
     public static boolean isLogin;
-   
-    public Bubur() {
-        initComponents();
 
-        // Login
-        /*if (Login.level.equals("admin")) {
-            btnTambah.setEnabled(true);
-            btnEdit.setEnabled(true);
-            btnHapus.setEnabled(true);
+    public CustomerMain() {
+        if (buburGowes.checkDBConnection(this)) {
+            this.setTitle("Bubur Gowes - Customer");
+            initComponents();
         } else {
-            btnTambah.setEnabled(false);
-            btnEdit.setEnabled(false);
-            btnHapus.setEnabled(false);
-        }*/
-        // Jika user sudah login maka Login menjadi Logout
-        if (isLogin) {
-            jLabelUserState.setText("Logout");
+            System.exit(0);
         }
 
-        /*String[] judul = {"Kode Pesan", "Nama", "No Tlp", "alamat", "pesanan", "jumlah", "total harga"};
+        /*String[] header = {
+                "Nama Produk",
+                "Harga Produk",
+                "Detail Produk",
+                "Stok Produk",
+                "Status Ketersediaan"
+        };
+
+        textName.setEditable(false);
+        textPrice.setEditable(false);
+
+        tableModel = new DefaultTableModel(rowData, header);
+        tableProduct.setModel(tableModel);
+
+        TableColumnModel columnModel = tableProduct.getColumnModel();
+        DefaultTableCellRenderer cellRender = new DefaultTableCellRenderer();
+
+        columnModel.getColumn(0).setMinWidth(200);
+        columnModel.getColumn(0).setMaxWidth(120);
+        columnModel.getColumn(1).setMaxWidth(140);
+        columnModel.getColumn(1).setMinWidth(140);
+        columnModel.getColumn(2).setMinWidth(200);
+        columnModel.getColumn(3).setMaxWidth(140);
+        columnModel.getColumn(3).setMinWidth(140);
+        columnModel.getColumn(4).setMaxWidth(140);
+        columnModel.getColumn(4).setMinWidth(140);
+
+        cellRender.setHorizontalAlignment(CENTER);
+        columnModel.getColumn(1).setCellRenderer(cellRender);
+        columnModel.getColumn(3).setCellRenderer(cellRender);
+        columnModel.getColumn(4).setCellRenderer(cellRender);
+
+        labelTotal.setText("Total Harga: Rp.0");
+        buburGowes.loadProductData(tableModel);
+        buburGowes.loadSaldoUser(current_user, labelSaldo);
+*/
+
+        // Membuat controller untuk tabel
+
+        // Memanggil method untuk menampilkan data
+        CustomerController.loadDataOrder();
+
+       /* String[] judul = {"Kode Pesan", "Nama", "No Tlp", "alamat", "pesanan", "jumlah", "total harga"};
         model = new DefaultTableModel(judul, 0);
         tabel.setModel(model);*/
 
@@ -125,7 +153,7 @@ public class Bubur extends javax.swing.JFrame {
         no_hp = new javax.swing.JTextField();
         jLabel36 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tabel = new javax.swing.JTable();
+        tabelOrder = new javax.swing.JTable();
         alamat = new javax.swing.JTextField();
         jSpinner1 = new javax.swing.JSpinner();
         jSpinner2 = new javax.swing.JSpinner();
@@ -278,7 +306,8 @@ public class Bubur extends javax.swing.JFrame {
         jLabelUserState.setFont(new java.awt.Font("Poppins SemiBold", 0, 12)); // NOI18N
         jLabelUserState.setForeground(new java.awt.Color(255, 255, 255));
         jLabelUserState.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelUserState.setText("Login");
+        jLabelUserState.setText("Logout");
+        jLabelUserState.setToolTipText("");
 
         javax.swing.GroupLayout jPanelToLoginLayout = new javax.swing.GroupLayout(jPanelToLogin);
         jPanelToLogin.setLayout(jPanelToLoginLayout);
@@ -745,7 +774,7 @@ public class Bubur extends javax.swing.JFrame {
 
         jPanel23.setBackground(new java.awt.Color(255, 254, 220));
 
-        jLabel30.setText("Id Pesan");
+        jLabel30.setText("No");
 
         jLabel31.setText("Nama");
 
@@ -801,7 +830,7 @@ public class Bubur extends javax.swing.JFrame {
 
         jLabel36.setText("No Telp");
 
-        tabel.setModel(new javax.swing.table.DefaultTableModel(
+        tabelOrder.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null}
             },
@@ -809,7 +838,12 @@ public class Bubur extends javax.swing.JFrame {
                 "No", "Nama", "No Telp", "Alamat", "Pesanan", "Jumlah", "Total"
             }
         ));
-        jScrollPane2.setViewportView(tabel);
+        tabelOrder.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelOrderMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tabelOrder);
 
         jCheckBox1.setText("Bubur Polos");
         jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
@@ -832,23 +866,23 @@ public class Bubur extends javax.swing.JFrame {
         jPanel23Layout.setHorizontalGroup(
             jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel23Layout.createSequentialGroup()
+                .addGap(27, 27, 27)
                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel23Layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
                         .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel30, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
+                            .addComponent(jLabel30, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel32, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jLabel31, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel36, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(jLabel36)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(nama, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
+                            .addComponent(nama)
                             .addComponent(alamat)
                             .addComponent(no_hp)
-                            .addComponent(id)))
+                            .addComponent(id, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel23Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel23Layout.createSequentialGroup()
                                 .addComponent(btn_hapus)
@@ -882,7 +916,7 @@ public class Bubur extends javax.swing.JFrame {
                                                 .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))))))))
                 .addGap(37, 37, 37)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(53, 53, 53))
+                .addGap(42, 42, 42))
         );
         jPanel23Layout.setVerticalGroup(
             jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1004,8 +1038,7 @@ public class Bubur extends javax.swing.JFrame {
     private void jPanelToLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanelToLoginMouseClicked
         // TODO add your handling code here:
         jLabelUserState.setText("Login");
-        new Login().setVisible(true);
-        this.dispose();
+        buburGowes.goToLogin(this);
     }//GEN-LAST:event_jPanelToLoginMouseClicked
 
     private void jPanel13AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jPanel13AncestorAdded
@@ -1070,6 +1103,10 @@ public class Bubur extends javax.swing.JFrame {
         jTabbedPane1.setSelectedIndex(1);
     }//GEN-LAST:event_jButtonHomeToMenuMouseClicked
 
+    private void tabelOrderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelOrderMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tabelOrderMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -1077,7 +1114,7 @@ public class Bubur extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -1087,20 +1124,21 @@ public class Bubur extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Bubur.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CustomerMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Bubur.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CustomerMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Bubur.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CustomerMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Bubur.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CustomerMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Bubur().setVisible(true);
+                new CustomerMain().setVisible(true);
             }
         });
     }
@@ -1180,7 +1218,7 @@ public class Bubur extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField nama;
     private javax.swing.JTextField no_hp;
-    private javax.swing.JTable tabel;
+    private javax.swing.JTable tabelOrder;
     // End of variables declaration//GEN-END:variables
 
 

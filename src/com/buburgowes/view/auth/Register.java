@@ -2,30 +2,28 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.buburgowes;
+package com.buburgowes.view.auth;
 
-import com.buburgowes.controller.DBConn;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import javax.swing.JOptionPane;
+import com.buburgowes.controller.auth.AuthController;
 
 /**
- *
- * @author Sayyidusy
+ * @author BuburGowes
  */
 public class Register extends javax.swing.JFrame {
 
-    DBConn db = new com.buburgowes.controller.DBConn();
+    private final AuthController buburGowes = new AuthController();
 
     /**
      * Creates new form Register
      */
     public Register() {
-        initComponents();
-        Bubur.isLogin = false;
+        // Check database connection status before showing the form
+        if (buburGowes.checkDBConnection(this)) {
+            this.setTitle("Register");
+            initComponents();
+        } else {
+            System.exit(0);
+        }
     }
 
     /**
@@ -45,18 +43,20 @@ public class Register extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         tfRegisterNama = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        tfRegisterPassword = new javax.swing.JPasswordField();
-        btnDaftar = new javax.swing.JButton();
-        labelToLogin = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
         tfRegisterUsername = new javax.swing.JTextField();
+        tfRegisterPassword = new javax.swing.JPasswordField();
         tfRegisterCPassword = new javax.swing.JPasswordField();
+        tfRegisterNomorHP = new javax.swing.JPasswordField();
+        btnDaftar = new javax.swing.JButton();
+        jLabelJudul = new javax.swing.JLabel();
+        jLabelName = new javax.swing.JLabel();
+        jLabelUsername = new javax.swing.JLabel();
+        labelToLogin = new javax.swing.JLabel();
+        jLabelLogin = new javax.swing.JLabel();
+        jLabelCPass = new javax.swing.JLabel();
+        jLabelPass = new javax.swing.JLabel();
+        jLabelNomorHP = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(235, 233, 176));
@@ -97,16 +97,6 @@ public class Register extends javax.swing.JFrame {
             .addComponent(jLabel4)
         );
 
-        jLabel2.setFont(new java.awt.Font("Poppins", 1, 18)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel2.setText("Isi Data Diri Mu dengan Lengkap !");
-
-        jLabel3.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jLabel3.setText("Nama");
-
-        jLabel8.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jLabel8.setText("Username");
-
         tfRegisterPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tfRegisterPasswordActionPerformed(evt);
@@ -122,6 +112,16 @@ public class Register extends javax.swing.JFrame {
             }
         });
 
+        jLabelJudul.setFont(new java.awt.Font("Poppins", 1, 18)); // NOI18N
+        jLabelJudul.setForeground(new java.awt.Color(51, 51, 51));
+        jLabelJudul.setText("Isi Data Diri Mu dengan Lengkap !");
+
+        jLabelName.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        jLabelName.setText("Nama");
+
+        jLabelUsername.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        jLabelUsername.setText("Username");
+
         labelToLogin.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
         labelToLogin.setText("Masuk Sekarang!");
         labelToLogin.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -130,14 +130,17 @@ public class Register extends javax.swing.JFrame {
             }
         });
 
-        jLabel10.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jLabel10.setText("Sudah punya akun? ");
+        jLabelLogin.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        jLabelLogin.setText("Sudah punya akun? ");
 
-        jLabel11.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jLabel11.setText("Konfirmasi Password");
+        jLabelCPass.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        jLabelCPass.setText("Konfirmasi Password");
 
-        jLabel12.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        jLabel12.setText("Password");
+        jLabelPass.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        jLabelPass.setText("Password");
+
+        jLabelNomorHP.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        jLabelNomorHP.setText("Nomor Telephone");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -149,32 +152,36 @@ public class Register extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnDaftar)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabelName, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(89, 89, 89)
                         .addComponent(tfRegisterNama, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(jPanel4Layout.createSequentialGroup()
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(tfRegisterUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(jPanel4Layout.createSequentialGroup()
-                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelPass, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(tfRegisterPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(jPanel4Layout.createSequentialGroup()
-                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelCPass, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(18, 18, 18)
-                            .addComponent(tfRegisterCPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(tfRegisterCPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
+                            .addComponent(jLabelNomorHP, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(tfRegisterNomorHP, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(89, 89, 89)
-                .addComponent(jLabel10)
+                .addComponent(jLabelLogin)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(labelToLogin)
                 .addContainerGap(96, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap(57, Short.MAX_VALUE)
-                .addComponent(jLabel2)
+                .addComponent(jLabelJudul)
                 .addGap(55, 55, 55))
         );
         jPanel4Layout.setVerticalGroup(
@@ -182,29 +189,33 @@ public class Register extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2)
+                .addComponent(jLabelJudul)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfRegisterNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
+                    .addComponent(jLabelName))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfRegisterUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
+                    .addComponent(jLabelUsername))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfRegisterPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel12))
+                    .addComponent(jLabelPass))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelCPass)
+                    .addComponent(tfRegisterCPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tfRegisterCPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel11))
-                .addGap(18, 18, 18)
+                    .addComponent(tfRegisterNomorHP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelNomorHP))
+                .addGap(73, 73, 73)
                 .addComponent(btnDaftar)
-                .addGap(39, 39, 39)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labelToLogin)
-                    .addComponent(jLabel10))
+                    .addComponent(jLabelLogin))
                 .addGap(76, 76, 76))
         );
 
@@ -236,7 +247,7 @@ public class Register extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(14, 14, 14)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(462, 462, 462))
@@ -267,77 +278,35 @@ public class Register extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tfRegisterPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfRegisterPasswordActionPerformed
+    private void jLabelCloseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelCloseMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_tfRegisterPasswordActionPerformed
-
-    private void btnDaftarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDaftarActionPerformed
-        // TODO add your handling code here:
-        ArrayList<String> usernameList = new ArrayList<>();
-        String username = tfRegisterUsername.getText().trim();
-        String nama = tfRegisterNama.getText();
-        String password = String.valueOf(tfRegisterPassword.getPassword());
-        String cPassword = String.valueOf(tfRegisterCPassword.getPassword());
-
-        //Querry
-        String query = "INSERT INTO users(username, nama, password) VALUES (?,?,?)";
-        String queryAuth = "SELECT * FROM users WHERE username = ?";
-
-        //statement
-        try {
-            Connection conn = db.dbConnection();
-
-            PreparedStatement ps = conn.prepareStatement(query);
-            ps.setString(1, username);
-            ps.setString(2, nama);
-            ps.setString(3, password);
-
-            // cek username
-            PreparedStatement psAuth = conn.prepareStatement(queryAuth);
-            psAuth.setString(1, username);
-
-            ResultSet rs = psAuth.executeQuery();
-
-            while (rs.next()) {
-                usernameList.add(rs.getString("username"));
-            }
-
-            // syarat-syarat username dan password yang valid menurut syarat yang telah ditentukan
-
-
-
-            if (usernameList.contains(username)) {
-                JOptionPane.showMessageDialog(null, "Username sudah terdaftar");
-            } else if (username.equals("") || nama.equals("") || password.equals("") || cPassword.equals("")) {
-                JOptionPane.showMessageDialog(null, "Semua field harus diisi");
-            } else if (!username.matches("^[a-zA-Z0-9]+([\\-]?[a-zA-Z0-9]+)*$")) {
-                JOptionPane.showMessageDialog(null, "Username hanya boleh mengandung huruf, angka, atau tanda strip (-)");
-            } else if (!password.equals(cPassword)) {
-                JOptionPane.showMessageDialog(null, "Password tidak sama");
-            } else if (password.length() < 8) {
-                JOptionPane.showMessageDialog(null, "Password minimal 8 karakter");
-            } else {
-                ps.executeUpdate();
-                JOptionPane.showMessageDialog(null, "Berhasil mendaftar");
-                this.dispose();
-                new Login().setVisible(true);
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        }
-    }//GEN-LAST:event_btnDaftarActionPerformed
+    }//GEN-LAST:event_jLabelCloseMouseClicked
 
     private void labelToLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelToLoginMouseClicked
         // TODO add your handling code here:
-        new Login().setVisible(true);
-        this.dispose();
+        buburGowes.goToLogin(this);
     }//GEN-LAST:event_labelToLoginMouseClicked
 
-    private void jLabelCloseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelCloseMouseClicked
+    private void btnDaftarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDaftarActionPerformed
         // TODO add your handling code here:
-        new Bubur().setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jLabelCloseMouseClicked
+        //        String getType = comboType.getSelectedItem().toString()
+        String getType = "Customer";
+        buburGowes.userRegistration(
+            this,
+            this,
+            tfRegisterNama.getText(),
+            tfRegisterUsername.getText(),
+            String.valueOf(tfRegisterPassword.getPassword()),
+            String.valueOf(tfRegisterCPassword.getPassword()),
+            "",
+            tfRegisterNomorHP.getText(),
+            getType
+        );
+    }//GEN-LAST:event_btnDaftarActionPerformed
+
+    private void tfRegisterPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfRegisterPasswordActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfRegisterPasswordActionPerformed
 
     /**
      * @param args the command line arguments
@@ -377,22 +346,24 @@ public class Register extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDaftar;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabelCPass;
     private javax.swing.JLabel jLabelClose;
+    private javax.swing.JLabel jLabelJudul;
+    private javax.swing.JLabel jLabelLogin;
     private javax.swing.JLabel jLabelMinimize;
+    private javax.swing.JLabel jLabelName;
+    private javax.swing.JLabel jLabelNomorHP;
+    private javax.swing.JLabel jLabelPass;
+    private javax.swing.JLabel jLabelUsername;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JLabel labelToLogin;
     private javax.swing.JPasswordField tfRegisterCPassword;
     private javax.swing.JTextField tfRegisterNama;
+    private javax.swing.JPasswordField tfRegisterNomorHP;
     private javax.swing.JPasswordField tfRegisterPassword;
     private javax.swing.JTextField tfRegisterUsername;
     // End of variables declaration//GEN-END:variables
