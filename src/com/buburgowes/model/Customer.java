@@ -1,9 +1,12 @@
 package com.buburgowes.model;
 
+import java.util.ArrayList;
+
 /**
  * @author andre
  */
 public class Customer extends User {
+    private ArrayList<Order> orders;
     private int saldo;
 
     public Customer(String user_name) {
@@ -11,16 +14,66 @@ public class Customer extends User {
         this.user_username = user_name;
     }
 
-    public Customer(String user_username, String user_fullName, String user_pass, String user_address, String user_phoneNumber, int user_token, int saldo, int user_type, int status) {
-        super(user_username, user_fullName, user_pass, user_address, user_phoneNumber, user_token, saldo, user_type, status);
+    public Customer(
+            String user_username,
+            String user_fullName,
+            String user_pass,
+            String user_address,
+            String user_phoneNumber,
+            int user_type,
+            int user_token,
+            int status,
+            int saldo) {
+        super(user_username,
+                user_fullName,
+                user_pass,
+                user_address,
+                user_phoneNumber,
+                user_type,
+                user_token,
+                status
+        );
         this.saldo = saldo;
+        this.orders = new ArrayList<>();
+
     }
 
-    public int getSaldo() {
-        return saldo;
+    public Customer(int id,
+                    String user_username,
+                    String user_fullName,
+                    String user_pass,
+                    String user_address,
+                    String user_phoneNumber,
+                    int user_type,
+                    int user_token,
+                    int status,
+                    int saldo
+    ) {
+        this(user_username,
+                user_fullName,
+                user_pass,
+                user_address,
+                user_phoneNumber,
+                user_type,
+                user_token,
+                status,
+                saldo
+        );
+        this.user_id = id;
+        this.orders = new ArrayList<>();
+
     }
 
-    public void setSaldo(int saldo) {
-        this.saldo = saldo;
+
+    public ArrayList<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(ArrayList<Order> orders) {
+        this.orders = orders;
+    }
+
+    public void addOrder(Order order) {
+        this.orders.add(order);
     }
 }

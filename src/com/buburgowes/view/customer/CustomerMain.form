@@ -1110,10 +1110,10 @@
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="nama" max="32767" attributes="0"/>
-                                          <Component id="alamat" max="32767" attributes="0"/>
-                                          <Component id="no_hp" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="id" alignment="0" min="-2" pref="286" max="-2" attributes="0"/>
+                                          <Component id="tfOrderFullname" max="32767" attributes="0"/>
+                                          <Component id="tfOrderAlamat" max="32767" attributes="0"/>
+                                          <Component id="tfOrderNoTelp" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="tfOrderId" alignment="0" min="-2" pref="286" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <Group type="102" alignment="1" attributes="0">
@@ -1176,22 +1176,22 @@
                                   <Group type="102" attributes="0">
                                       <Group type="103" groupAlignment="3" attributes="0">
                                           <Component id="jLabel30" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="id" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="tfOrderId" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
                                           <Component id="jLabel31" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="nama" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="tfOrderFullname" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
                                           <Component id="jLabel36" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="no_hp" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="tfOrderNoTelp" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Component id="jLabel32" min="-2" max="-2" attributes="0"/>
-                                          <Component id="alamat" min="-2" pref="73" max="-2" attributes="0"/>
+                                          <Component id="tfOrderAlamat" min="-2" pref="73" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
@@ -1254,14 +1254,14 @@
                         <Property name="text" type="java.lang.String" value="Jumlah"/>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JTextField" name="id">
+                    <Component class="javax.swing.JTextField" name="tfOrderId">
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="idActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfOrderIdActionPerformed"/>
                       </Events>
                     </Component>
-                    <Component class="javax.swing.JTextField" name="nama">
+                    <Component class="javax.swing.JTextField" name="tfOrderFullname">
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="namaActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfOrderFullnameActionPerformed"/>
                       </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="btn_hapus">
@@ -1314,9 +1314,9 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_tambahActionPerformed"/>
                       </Events>
                     </Component>
-                    <Component class="javax.swing.JTextField" name="no_hp">
+                    <Component class="javax.swing.JTextField" name="tfOrderNoTelp">
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="no_hpActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfOrderNoTelpActionPerformed"/>
                       </Events>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel36">
@@ -1334,14 +1334,35 @@
                         <Component class="javax.swing.JTable" name="tabelOrder">
                           <Properties>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                              <Table columnCount="7" rowCount="1">
-                                <Column editable="true" title="No" type="java.lang.Object"/>
-                                <Column editable="true" title="Nama" type="java.lang.Object"/>
-                                <Column editable="true" title="No Telp" type="java.lang.Object"/>
-                                <Column editable="true" title="Alamat" type="java.lang.Object"/>
-                                <Column editable="true" title="Pesanan" type="java.lang.Object"/>
-                                <Column editable="true" title="Jumlah" type="java.lang.Object"/>
-                                <Column editable="true" title="Total" type="java.lang.Object"/>
+                              <Table columnCount="7" rowCount="2">
+                                <Column editable="true" title="No" type="java.lang.Object">
+                                  <Data value="1"/>
+                                  <Data value="null"/>
+                                </Column>
+                                <Column editable="true" title="Nama" type="java.lang.Object">
+                                  <Data value="Faiz"/>
+                                  <Data value="null"/>
+                                </Column>
+                                <Column editable="true" title="No Telp" type="java.lang.Object">
+                                  <Data value="0987654321"/>
+                                  <Data value="null"/>
+                                </Column>
+                                <Column editable="true" title="Alamat" type="java.lang.Object">
+                                  <Data value="Bandung"/>
+                                  <Data value="null"/>
+                                </Column>
+                                <Column editable="true" title="Pesanan" type="java.lang.Object">
+                                  <Data value="Bubur Polos"/>
+                                  <Data value="null"/>
+                                </Column>
+                                <Column editable="true" title="Jumlah" type="java.lang.Object">
+                                  <Data value="2"/>
+                                  <Data value="null"/>
+                                </Column>
+                                <Column editable="true" title="Total" type="java.lang.Object">
+                                  <Data value="14000"/>
+                                  <Data value="null"/>
+                                </Column>
                               </Table>
                             </Property>
                             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -1393,7 +1414,7 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Component class="javax.swing.JTextField" name="alamat">
+                    <Component class="javax.swing.JTextField" name="tfOrderAlamat">
                     </Component>
                     <Component class="javax.swing.JSpinner" name="jSpinner1">
                     </Component>

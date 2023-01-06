@@ -16,8 +16,8 @@ public abstract class Controller {
     protected static final MysqlDataSource data = new MysqlDataSource();
     protected final ArrayList<User> userList = new ArrayList<>();
     protected final ArrayList<Product> productList = new ArrayList<>();
-    protected final ArrayList<Transaction> transactionList = new ArrayList<>();
-
+    protected final ArrayList<Order> orderList = new ArrayList<>();
+    protected User currentUser;
     public Controller() {
         this.dbConnection(data);
     }
@@ -77,8 +77,8 @@ public abstract class Controller {
             );
         }
     }
-
-  /*  public void insertProductData(
+    // Insert Product Data
+    /*  public void insertProductData(
             Component parentComponent,
             String textName,
             String textDesc,
@@ -328,8 +328,8 @@ public abstract class Controller {
         productList.add(product);
     }
 
-    public void addTransaction(Transaction transaction) {
-        transactionList.add(transaction);
+    public void addOrders(Order order) {
+        orderList.add(order);
     }
 
     // Go to login
@@ -339,6 +339,7 @@ public abstract class Controller {
         jFrame.dispose();
         login.setVisible(true);
     }
+
     public ArrayList<User> getUserList() {
         return userList;
     }

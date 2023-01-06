@@ -6,6 +6,8 @@ package com.buburgowes.view.auth;
 
 import com.buburgowes.controller.auth.AuthController;
 
+import static java.awt.EventQueue.invokeLater;
+
 /**
  * @author BuburGowes
  */
@@ -336,11 +338,8 @@ public class Register extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Register().setVisible(true);
-            }
-        });
+        invokeLater(() ->
+                new Register().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

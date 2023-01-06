@@ -4,12 +4,14 @@ package com.buburgowes.model;
  * @author andre
  */
 public abstract class User {
+
+    protected int user_id;
     protected String user_username;
     protected String user_fullName;
     protected String user_pass;
     protected String user_address;
     protected String user_phoneNumber;
-    protected int user_token, saldo, status;
+    protected int user_token, status;
     protected int user_type;
 
     public User(String current_user) {
@@ -22,9 +24,8 @@ public abstract class User {
             String user_pass,
             String user_address,
             String user_phoneNumber,
-            int user_token,
-            int saldo,
             int user_type,
+            int user_token,
             int status
     ) {
         this.user_username = user_username;
@@ -32,18 +33,36 @@ public abstract class User {
         this.user_pass = user_pass;
         this.user_address = user_address;
         this.user_phoneNumber = user_phoneNumber;
-        this.user_token = user_token;
-        this.saldo = saldo;
         this.user_type = user_type;
+        this.user_token = user_token;
         this.status = status;
+    }
+
+    public User(
+            int user_id,
+            String user_username,
+            String user_fullName,
+            String user_pass,
+            String user_address,
+            String user_phoneNumber,
+            int user_type,
+            int user_token,
+            int status
+    ) {
+        this(user_username,
+                user_fullName,
+                user_pass,
+                user_address,
+                user_phoneNumber,
+                user_type,
+                user_token,
+                status
+        );
+        this.user_id = user_id;
     }
 
     public int getUser_token() {
         return user_token;
-    }
-
-    public int getSaldo() {
-        return saldo;
     }
 
     public int getStatus() {
@@ -77,10 +96,6 @@ public abstract class User {
         return user_type;
     }
 
-    public void setSaldo(int saldo) {
-        this.saldo = saldo;
-    }
-
     public String getUserType() {
         String result = "";
 
@@ -110,6 +125,10 @@ public abstract class User {
 
     public String getUser_phoneNumber() {
         return user_phoneNumber;
+    }
+
+    public int getUser_id() {
+        return user_id;
     }
 }
 

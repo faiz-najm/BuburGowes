@@ -5,19 +5,21 @@ package com.buburgowes.model;
  * @author andre
  */
 public class Product {
+    private int id;
     private String product_name, product_desc;
-    private int product_qty, is_available, product_price;
-
-    public Product(String product_name, String product_desc, int product_qty, int is_available, int product_price) {
-        this.product_name = product_name;
-        this.product_desc = product_desc;
-        this.product_qty = product_qty;
-        this.is_available = is_available;
-        this.product_price = product_price;
-    }
+    private int is_available;
+    private int product_price;
 
     public Product(String product_name) {
         this.product_name = product_name;
+    }
+
+    public Product(int id, String product_name, String product_desc, int is_available, int product_price) {
+        this.id = id;
+        this.product_name = product_name;
+        this.product_desc = product_desc;
+        this.is_available = is_available;
+        this.product_price = product_price;
     }
 
     public String getProduct_name() {
@@ -28,29 +30,14 @@ public class Product {
         return product_desc;
     }
 
-    public int getProduct_qty() {
-        return product_qty;
-    }
-
-    public void setProduct_qty(int product_qty) {
-        this.product_qty = product_qty;
-    }
-    
     public String getAvailableStatus() {
-        String result = "";
 
-        switch (getIs_available()) {
-            case 0:
-                result = "Habis";
-                break;
-            case 1:
-                result = "Ada";
-                break;
-            case 2:
-                result = "Pre Order";
-                break;
-        }
-        return result;
+        return switch (getIs_available()) {
+            case 0 -> "Tidak Tersedia";
+            case 1 -> "Tersedia";
+            case 2 -> "Pre Order";
+            default -> "";
+        };
     }
 
     public int getIs_available() {

@@ -4,12 +4,10 @@ import com.buburgowes.controller.Controller;
 import com.buburgowes.model.Admin;
 import com.buburgowes.model.Customer;
 import com.buburgowes.view.customer.CustomerMain;
-import com.buburgowes.model.User;
 import com.buburgowes.view.admin.AdminMain;
 
 import javax.swing.*;
 import java.awt.*;
-import java.security.PrivateKey;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Random;
@@ -80,9 +78,6 @@ public class AuthController extends Controller {
                 } else {
                     Random random = new Random();
 
-                    // auth token generator (random number) with 6 digits length (000000 - 999999)
-                    int auth_token = random.nextInt(999999 + 1);
-
                     int user_type = 0;
 
                     // validasi user_type (admin atau customer)
@@ -91,40 +86,53 @@ public class AuthController extends Controller {
 
                     //Membuat objek User tipe Admin
                     if (user_type == 1) {
-                        User admin = new Admin(
+
+                        // auth token generator (random number) with 6 digits length (000000 - 999999)
+                        int auth_token = random.nextInt(999999 + 1);
+
+                        Admin currentUser = new Admin(
                                 textUsername.toLowerCase(),
                                 textFullname,
                                 textPass,
                                 textAddress,
                                 textPhone,
                                 auth_token,
-                                0,
                                 1,
                                 0
                         );
 
-                        addUser(admin);
+                        addUser(currentUser);
 
                         // POST Admin type User data to database
-                        postUserAdmin(jFrame, parentComponent, conn, (Admin) admin, textPass);
+                        postUserAdmin(
+                                jFrame,
+                                parentComponent,
+                                conn,
+                                currentUser,
+                                textPass);
 
                         //Membuat objek User tipe Customer
                     } else if (user_type == 2) {
-                        User customer = new Customer(
+                        Customer currentUser = new Customer(
                                 textUsername.toLowerCase(),
                                 textFullname,
                                 textPass,
                                 textAddress,
                                 textPhone,
-                                0,
-                                0,
                                 2,
+                                0,
+                                0,
                                 0
                         );
-                        addUser(customer);
+                        addUser(currentUser);
 
                         // POST Customer type User data to database
-                        postUserCustomer(jFrame, parentComponent, conn, (Customer) customer, textPass);
+                        postUserCustomer(
+                                jFrame,
+                                parentComponent,
+                                conn,
+                                currentUser,
+                                textPass);
                     }
                 }
             }
@@ -222,8 +230,13 @@ public class AuthController extends Controller {
         try {
             Connection conn = data.getConnection();
             String getQuery = "SELECT * FROM m_user WHERE user_username=?";
+            // Variable authentication data
             String username = "", pass = "";
-            int userType = 0, userState = 0;
+            int userType = 0, userState = 0, authToken = 0;
+
+            // Variable for user data
+            String fullname = "", address = "", phone = "";
+            int userId = 0, userSaldo = 0;
 
             PreparedStatement pstate = conn.prepareStatement(getQuery);
             pstate.setString(1, textUsername);
@@ -236,6 +249,14 @@ public class AuthController extends Controller {
                 pass = rset.getString("user_pass");
                 userType = rset.getInt("user_type");
                 userState = rset.getInt("status");
+
+                userId = rset.getInt("id");
+                fullname = rset.getString("user_fullname");
+                address = rset.getString("user_address");
+                phone = rset.getString("user_phone");
+                authToken = rset.getInt("auth_token");
+                userSaldo = rset.getInt("user_saldo");
+
             }
 
             System.out.format("%s, %s\n", username, pass);
@@ -257,9 +278,9 @@ public class AuthController extends Controller {
                 validation(parentComponent, message);
 
             } else {
-                String query = "UPDATE m_user SET status = 1 WHERE user_username=?";
+                String queryUpdate = "UPDATE m_user SET status = 1 WHERE user_username=?";
 
-                PreparedStatement ps = conn.prepareStatement(query);
+                PreparedStatement ps = conn.prepareStatement(queryUpdate);
                 ps.setString(1, username);
                 ps.executeUpdate();
 
@@ -271,12 +292,35 @@ public class AuthController extends Controller {
                 );
 
                 if (userType == 1) {
-                    AdminMain page = new AdminMain();
+                    currentUser = new Admin(
+                            userId,
+                            username,
+                            fullname,
+                            pass,
+                            address,
+                            phone,
+                            authToken,
+                            userType,
+                            userState
+                    );
+                    AdminMain page = new AdminMain((Admin) currentUser);
 
                     jFrame.dispose();
                     page.setVisible(true);
                 } else if (userType == 2) {
-                    CustomerMain page = new CustomerMain();
+                    currentUser = new Customer(userId,
+                            username,
+                            fullname,
+                            pass,
+                            address,
+                            phone,
+                            authToken,
+                            userState,
+                            userType,
+                            userSaldo
+
+                    );
+                    CustomerMain page = new CustomerMain((Customer) currentUser);
 
                     jFrame.dispose();
                     page.setVisible(true);
