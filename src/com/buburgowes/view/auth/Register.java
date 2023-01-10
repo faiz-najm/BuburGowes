@@ -106,6 +106,12 @@ public class Register extends javax.swing.JFrame {
             }
         });
 
+        tfRegisterNomorHP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfRegisterNomorHPActionPerformed(evt);
+            }
+        });
+
         btnDaftar.setBackground(new java.awt.Color(97, 151, 63));
         btnDaftar.setForeground(new java.awt.Color(255, 255, 255));
         btnDaftar.setText("Daftar");
@@ -213,13 +219,13 @@ public class Register extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfRegisterNomorHP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelNomorHP))
-                .addGap(30, 30, 30)
+                .addGap(18, 18, 18)
                 .addComponent(btnDaftar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelToLogin)
-                    .addComponent(jLabelLogin))
-                .addGap(50, 50, 50))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelLogin)
+                    .addComponent(labelToLogin))
+                .addGap(44, 44, 44))
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -233,7 +239,7 @@ public class Register extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(67, 67, 67)
                 .addComponent(jLabel5)
-                .addContainerGap(66, Short.MAX_VALUE))
+                .addContainerGap(54, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                     .addGap(349, 349, 349)
@@ -261,8 +267,8 @@ public class Register extends javax.swing.JFrame {
                         .addComponent(jLabelClose, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabelMinimize))
                     .addGap(210, 210, 210)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(191, 191, 191)))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(210, 210, 210)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -273,7 +279,7 @@ public class Register extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 682, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 646, Short.MAX_VALUE)
         );
 
         pack();
@@ -308,6 +314,10 @@ public class Register extends javax.swing.JFrame {
     private void tfRegisterPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfRegisterPasswordActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tfRegisterPasswordActionPerformed
+
+    private void tfRegisterNomorHPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfRegisterNomorHPActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfRegisterNomorHPActionPerformed
 
     /**
      * @param args the command line arguments

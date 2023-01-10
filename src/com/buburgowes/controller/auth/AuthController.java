@@ -84,7 +84,7 @@ public class AuthController extends Controller {
                     if (comboType.equals("Admin")) user_type = 1;
                     else if (comboType.equals("Customer")) user_type = 2;
 
-                    //Membuat objek User tipe Admin
+                    //Membuat objek User tipe AdminMain
                     if (user_type == 1) {
 
                         // auth token generator (random number) with 6 digits length (000000 - 999999)
@@ -103,7 +103,7 @@ public class AuthController extends Controller {
 
                         addUser(currentUser);
 
-                        // POST Admin type User data to database
+                        // POST AdminMain type User data to database
                         postUserAdmin(
                                 jFrame,
                                 parentComponent,

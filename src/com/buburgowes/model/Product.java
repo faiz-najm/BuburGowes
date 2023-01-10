@@ -18,8 +18,8 @@ public class Product {
         this.id = id;
         this.product_name = product_name;
         this.product_desc = product_desc;
-        this.is_available = is_available;
         this.product_price = product_price;
+        this.is_available = is_available;
     }
 
     public String getProduct_name() {

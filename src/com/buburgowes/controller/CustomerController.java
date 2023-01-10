@@ -4,7 +4,6 @@ import com.buburgowes.model.*;
 import com.buburgowes.view.customer.CustomerMain;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.*;
 import java.time.ZoneId;
@@ -16,7 +15,7 @@ public class CustomerController extends Controller {
     public OrderTabelModel tabelModel;
     private int inc = 1;
 
-    public CustomerController(Customer currentUser) {
+    public CustomerController() {
         super();
         tabelModel = new OrderTabelModel();
         setCurrentUser(currentUser);
@@ -32,9 +31,12 @@ public class CustomerController extends Controller {
     }
 
     // Load transaction data for table
-    public void loadOrdersData() {
+    public void loadOrderTabel() {
         // Clear table data
         tabelModel.clearDataTable();
+        currentUser.getOrders().clear();
+
+        Product product;
 
         try {
 //            ArrayList<TempModel> tempList = new ArrayList<>();
@@ -80,14 +82,16 @@ public class CustomerController extends Controller {
                         int productPrice = orderSet.getInt("product_price");
                         int isAvailable = orderSet.getInt("is_available");
 
+                        product = new Product(productCode,
+                                productName,
+                                productDesc,
+                                productPrice,
+                                isAvailable);
+
                         order.addOrderDetail(
                                 new OrderDetail(jumlahPesanan,
-                                        totalHarga,
-                                        new Product(productCode,
-                                                productName,
-                                                productDesc,
-                                                productPrice,
-                                                isAvailable)));
+                                        totalHarga, product
+                                ));
 
                         int orderDetailSize = order.getOrderDetails().size() - 1;
                         int orderSize = currentUser.getOrders().size() - 1;
@@ -149,8 +153,7 @@ public class CustomerController extends Controller {
                 if (jumlahBubur1 > 0) {
                     String insertOrderDetail = "INSERT INTO m_orderdetails (id_m_orders, id_m_product, jumlahPesanan, totalHarga) VALUES (?, ?, ?, ?)";
 
-                    int hargaBubur = 7000;
-                    int totalHargaBubur = hargaBubur * jumlahBubur1;
+                    int totalHargaBubur = productList.get(0).getProduct_price() * jumlahBubur1;
 
                     PreparedStatement psOrderDetail = conn.prepareStatement(insertOrderDetail);
                     psOrderDetail.setString(1, orderNumber);
@@ -163,18 +166,14 @@ public class CustomerController extends Controller {
                         currentUser.addOrder(new Order(orderNumber).addOrderDetail(
                                 new OrderDetail(jumlahBubur1,
                                         totalHargaBubur,
-                                        new Product(1,
-                                                "Bubur Ayam",
-                                                "Bubur ayam dengan bumbu khas",
-                                                1,
-                                                hargaBubur))));
+                                        productList.get(0))));
 
                         tabelModel.addRow(new Object[]{
-                                inc++,
+                                orderNumber,
                                 currentUser.getUser_fullName(),
                                 currentUser.getUser_phoneNumber(),
                                 currentUser.getUser_address(),
-                                "Bubur Ayam",
+                                productList.get(0).getProduct_name(),
                                 jumlahBubur1,
                                 totalHargaBubur
                         });
@@ -188,8 +187,8 @@ public class CustomerController extends Controller {
                 if (jumlahBubur2 > 0) {
                     String insertOrderDetail = "INSERT INTO m_orderdetails (id_m_orders, id_m_product, jumlahPesanan, totalHarga) VALUES (?, ?, ?, ?)";
 
-                    int hargaBubur = 12000;
-                    int totalHargaBubur = hargaBubur * jumlahBubur2;
+                    int totalHargaBubur = productList.get(1).getProduct_price() * jumlahBubur2;
+
 
                     PreparedStatement psOrderDetail = conn.prepareStatement(insertOrderDetail);
                     psOrderDetail.setString(1, orderNumber);
@@ -202,18 +201,14 @@ public class CustomerController extends Controller {
                         currentUser.addOrder(new Order(orderNumber).addOrderDetail(
                                 new OrderDetail(jumlahBubur2,
                                         totalHargaBubur,
-                                        new Product(2,
-                                                "Bubur Ayam",
-                                                "Bubur ayam dengan bumbu khas",
-                                                1,
-                                                hargaBubur))));
+                                        productList.get(2))));
 
                         tabelModel.addRow(new Object[]{
-                                inc++,
+                                orderNumber,
                                 currentUser.getUser_fullName(),
                                 currentUser.getUser_phoneNumber(),
                                 currentUser.getUser_address(),
-                                "Bubur Ayam",
+                                productList.get(1).getProduct_name(),
                                 jumlahBubur2,
                                 totalHargaBubur
                         });
@@ -226,8 +221,7 @@ public class CustomerController extends Controller {
                 if (jumlahBubur3 > 0) {
                     String insertOrderDetail = "INSERT INTO m_orderdetails (id_m_orders, id_m_product, jumlahPesanan, totalHarga) VALUES (?, ?, ?, ?)";
 
-                    int hargaBubur = 12000;
-                    int totalHargaBubur = hargaBubur * jumlahBubur3;
+                    int totalHargaBubur = productList.get(2).getProduct_price() * jumlahBubur3;
 
                     PreparedStatement psOrderDetail = conn.prepareStatement(insertOrderDetail);
                     psOrderDetail.setString(1, orderNumber);
@@ -241,17 +235,13 @@ public class CustomerController extends Controller {
                         currentUser.addOrder(new Order(orderNumber).addOrderDetail(
                                 new OrderDetail(jumlahBubur1,
                                         totalHargaBubur,
-                                        new Product(3,
-                                                "Bubur Ayam",
-                                                "Bubur ayam dengan bumbu khas",
-                                                1,
-                                                hargaBubur))));
+                                        productList.get(2))));
                         tabelModel.addRow(new Object[]{
-                                inc++,
+                                orderNumber,
                                 currentUser.getUser_fullName(),
                                 currentUser.getUser_phoneNumber(),
                                 currentUser.getUser_address(),
-                                "Bubur Ayam",
+                                productList.get(2).getProduct_name(),
                                 jumlahBubur3,
                                 totalHargaBubur
                         });
@@ -260,15 +250,9 @@ public class CustomerController extends Controller {
                         System.out.println(e.getMessage());
                     }
                 }
-
-                // add order to current user
-
-
                 // jika berhasil menginsert data ke table m_orderdetails maka akan commit data yang sudah diinsert ke table m_orders
-
                 JOptionPane.showMessageDialog(parentComponent, "Pesanan Anda berhasil diproses");
 
-                //
 
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
@@ -276,10 +260,9 @@ public class CustomerController extends Controller {
         }
     }
 
-    public void deleteOrderData(
+    public void cancelOrderData(
             Component parentComponent,
-            String productName,
-            int row) {
+            String orderNumber) {
         try {
             Connection conn = data.getConnection();
            /* String removeForeignKeyCheck = "SET foreign_key_checks = 0";
@@ -290,17 +273,14 @@ public class CustomerController extends Controller {
             String removeQuery = "DELETE FROM m_orders WHERE orderNumber=?";
 
             PreparedStatement psDel = conn.prepareStatement(removeQuery);
-            psDel.setString(1, productName);
+            psDel.setString(1, orderNumber);
 
-            int affected = psDel.executeUpdate();
-
-            if (affected > 0) {
-                JOptionPane.showMessageDialog(parentComponent, "Data berhasil dihapus");
-                tabelModel.removeRow(row);
+            if (psDel.executeUpdate() > 0) {
+                loadOrderTabel();
+                JOptionPane.showMessageDialog(parentComponent, "Pesanan Anda berhasil dibatalkan");
             } else {
-                JOptionPane.showMessageDialog(parentComponent, "Data gagal dihapus");
+                JOptionPane.showMessageDialog(parentComponent, "Pesanan Anda gagal dibatalkan");
             }
-            loadOrdersData();
 
 //            productList.clear();
 
@@ -312,7 +292,7 @@ public class CustomerController extends Controller {
             JOptionPane.showMessageDialog(
                     parentComponent,
                     "Gagal melakukan perubahan! Periksa lagi koneksi Anda!",
-                    "Admin Page",
+                    "Customer Page",
                     JOptionPane.ERROR_MESSAGE
             );
         }
@@ -540,7 +520,7 @@ public class CustomerController extends Controller {
     }*/
     // Load product data for table
 
-    public void loadProductData() {
+    public void loadProductTabel() {
         try {
             Connection conn = data.getConnection();
             String query = "SELECT * FROM m_product";
@@ -561,6 +541,7 @@ public class CustomerController extends Controller {
                         productStatus,
                         productPrice
                 ));
+
                 int index = productList.size() - 1;
 
                 this.tabelModel.addRow(new Object[]{

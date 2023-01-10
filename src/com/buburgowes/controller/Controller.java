@@ -18,6 +18,7 @@ public abstract class Controller {
     protected final ArrayList<Product> productList = new ArrayList<>();
     protected final ArrayList<Order> orderList = new ArrayList<>();
     public static User currentUser;
+
     public Controller() {
         this.dbConnection(data);
     }
@@ -327,6 +328,34 @@ public abstract class Controller {
     public void addProduct(Product product) {
         productList.add(product);
     }
+    public void loadProductData() {
+        try {
+            Connection conn = data.getConnection();
+            String query = "SELECT * FROM m_product";
+
+            Statement state = conn.createStatement();
+            ResultSet rset = state.executeQuery(query);
+
+            while (rset.next()) {
+                int productCode = rset.getInt("id");
+                String productName = rset.getString("product_name");
+                String productDesc = rset.getString("product_desc");
+                int productPrice = rset.getInt("product_price");
+                int productStatus = rset.getInt("is_available");
+
+                addProduct(new Product(
+                        productCode, productName,
+                        productDesc,
+                        productStatus,
+                        productPrice
+                ));
+
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Gagal memuat data produk!");
+        }
+    }
 
     public void addOrders(Order order) {
         orderList.add(order);
@@ -346,5 +375,43 @@ public abstract class Controller {
 
     public ArrayList<Product> getProductList() {
         return productList;
+    }
+
+    public void logoutAccount(
+            JFrame jFrame,
+            Component parentComponent,
+            String current_user
+    ) {
+        try {
+            Connection conn = data.getConnection();
+            String getQuery = "SELECT * FROM m_user WHERE user_username=?";
+
+            PreparedStatement ps = conn.prepareStatement(getQuery);
+            ps.setString(1, current_user);
+
+            // Database connections
+            ps.executeQuery();
+            String updateQuery = "UPDATE m_user SET status = 0 WHERE user_username=?";
+
+            PreparedStatement pstate = conn.prepareStatement(updateQuery);
+            pstate.setString(1, current_user);
+            pstate.executeUpdate();
+
+            JOptionPane.showMessageDialog(
+                    parentComponent,
+                    current_user + " berhasil logout!",
+                    "Admin Page",
+                    1
+            );
+            this.goToLogin(jFrame);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            JOptionPane.showMessageDialog(
+                    parentComponent,
+                    "Gagal melakukan Sign-out akun! Periksa lagi koneksi Anda!",
+                    "Foodiez",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
     }
 }
