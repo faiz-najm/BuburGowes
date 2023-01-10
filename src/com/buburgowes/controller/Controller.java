@@ -10,14 +10,14 @@ import java.sql.*;
 import java.util.ArrayList;
 
 /**
- * @author andre
+ * @author faiz
  */
 public abstract class Controller {
     protected static final MysqlDataSource data = new MysqlDataSource();
     protected final ArrayList<User> userList = new ArrayList<>();
     protected final ArrayList<Product> productList = new ArrayList<>();
     protected final ArrayList<Order> orderList = new ArrayList<>();
-    protected User currentUser;
+    public static User currentUser;
     public Controller() {
         this.dbConnection(data);
     }

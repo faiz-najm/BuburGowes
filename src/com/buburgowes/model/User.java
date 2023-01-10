@@ -1,7 +1,7 @@
 package com.buburgowes.model;
 
 /**
- * @author andre
+ * @author faiz
  */
 public abstract class User {
 
@@ -11,23 +11,23 @@ public abstract class User {
     protected String user_pass;
     protected String user_address;
     protected String user_phoneNumber;
-    protected int user_token, status;
     protected int user_type;
+    protected int user_token, status;
 
     public User(String current_user) {
         this.user_username = current_user;
     }
 
-    public User(
-            String user_username,
-            String user_fullName,
-            String user_pass,
-            String user_address,
-            String user_phoneNumber,
-            int user_type,
-            int user_token,
-            int status
-    ) {
+    public User(int user_id,
+                String user_username,
+                String user_fullName,
+                String user_pass,
+                String user_address,
+                String user_phoneNumber,
+                int user_type,
+                int user_token,
+                int status) {
+        this.user_id = user_id;
         this.user_username = user_username;
         this.user_fullName = user_fullName;
         this.user_pass = user_pass;
@@ -36,29 +36,6 @@ public abstract class User {
         this.user_type = user_type;
         this.user_token = user_token;
         this.status = status;
-    }
-
-    public User(
-            int user_id,
-            String user_username,
-            String user_fullName,
-            String user_pass,
-            String user_address,
-            String user_phoneNumber,
-            int user_type,
-            int user_token,
-            int status
-    ) {
-        this(user_username,
-                user_fullName,
-                user_pass,
-                user_address,
-                user_phoneNumber,
-                user_type,
-                user_token,
-                status
-        );
-        this.user_id = user_id;
     }
 
     public int getUser_token() {

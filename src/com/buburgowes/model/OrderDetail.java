@@ -2,6 +2,7 @@ package com.buburgowes.model;
 
 public class OrderDetail {
     private int jumlahPesanan, totalHarga;
+    private Product product;
 
     public OrderDetail(int jumlahPesanan, int totalHarga, Product product) {
         this.jumlahPesanan = jumlahPesanan;
@@ -20,7 +21,5 @@ public class OrderDetail {
     public Product getProduct() {
         return product;
     }
-
-    private Product product;
 
 }

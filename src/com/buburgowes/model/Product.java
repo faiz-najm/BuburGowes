@@ -2,7 +2,7 @@ package com.buburgowes.model;
 
 /**
  *
- * @author andre
+ * @author faiz
  */
 public class Product {
     private int id;

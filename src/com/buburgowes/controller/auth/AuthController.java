@@ -90,14 +90,14 @@ public class AuthController extends Controller {
                         // auth token generator (random number) with 6 digits length (000000 - 999999)
                         int auth_token = random.nextInt(999999 + 1);
 
-                        Admin currentUser = new Admin(
+                        Admin currentUser = new Admin(0,
                                 textUsername.toLowerCase(),
                                 textFullname,
                                 textPass,
                                 textAddress,
                                 textPhone,
-                                auth_token,
                                 1,
+                                auth_token,
                                 0
                         );
 
@@ -113,7 +113,7 @@ public class AuthController extends Controller {
 
                         //Membuat objek User tipe Customer
                     } else if (user_type == 2) {
-                        Customer currentUser = new Customer(
+                        Customer currentUser = new Customer(0,
                                 textUsername.toLowerCase(),
                                 textFullname,
                                 textPass,

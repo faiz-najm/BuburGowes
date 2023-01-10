@@ -4,7 +4,7 @@
  */
 package com.buburgowes.view.admin;
 
-import com.buburgowes.controller.CustomerController;
+import com.buburgowes.controller.admin.AdminController;
 import com.buburgowes.model.Admin;
 
 import static java.awt.EventQueue.invokeLater;
@@ -14,8 +14,8 @@ import static java.awt.EventQueue.invokeLater;
  */
 public class AdminMain extends javax.swing.JFrame {
 
+    private final AdminController buburGowes = new AdminController();
     private static Admin currentUser;
-    private final CustomerController buburGowes = new CustomerController();
 
     /**
      * Creates new form AdminMain
@@ -23,7 +23,7 @@ public class AdminMain extends javax.swing.JFrame {
     public AdminMain(Admin currentUser) {
         if (buburGowes.checkDBConnection(this)) {
             this.setTitle("Bubur Gowes - Customer");
-            AdminMain.currentUser = currentUser;
+            buburGowes.currentUser = currentUser;
             initComponents();
         } else {
             System.exit(0);

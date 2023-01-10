@@ -11,12 +11,11 @@ package com.buburgowes.view.customer;
 import com.buburgowes.controller.CustomerController;
 import com.buburgowes.model.Customer;
 
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.*;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
 import static java.awt.EventQueue.invokeLater;
-import static javax.swing.SwingConstants.CENTER;
 
 public class CustomerMain extends javax.swing.JFrame {
 
@@ -24,34 +23,48 @@ public class CustomerMain extends javax.swing.JFrame {
     /**
      * Creates new form CustomerMain
      */
-    private final CustomerController buburGowes = new CustomerController();
+    private final CustomerController buburGowes = new CustomerController(currentUser);
+
     String[][] rowData;
 
     public CustomerMain(Customer currentUser) {
+
         if (buburGowes.checkDBConnection(this)) {
             this.setTitle("Bubur Gowes - Customer");
-            CustomerMain.currentUser = currentUser;
+            buburGowes.currentUser = currentUser;
             initComponents();
+            tfOrderFullname.setEditable(false);
+            tfOrderNoTelp.setEditable(false);
         } else {
             System.exit(0);
         }
 
-        tfOrderId.setEditable(false);
+        // Membuat tabel order
 
-        String[] kolom = {
-                "No",
-                "Nama",
-                "No Telp",
-                "Alamat",
-                "Pesanan",
-                "Jumlah",
-                "Total"
-        };
+        tabelOrder.setModel(buburGowes.tabelModel);
 
+        // Membuat judul kolom tabel order center
 
-        DefaultTableModel tableModel = new DefaultTableModel(rowData, kolom);
-        tabelOrder.setModel(tableModel);
-/*
+        TableCellRenderer rendererFromHeader = tabelOrder.getTableHeader().getDefaultRenderer();
+        JLabel headerLabel = (JLabel) rendererFromHeader;
+        headerLabel.setHorizontalAlignment(JLabel.CENTER);
+
+        // Buat kolom No, Nama tidak bisa diedit
+        TableColumnModel columnModel = tabelOrder.getColumnModel();
+        columnModel.getColumn(0).setResizable(false);
+
+        // Set jSpinner jumlah pesanan minimum 1 dan maksimum 10
+        jSpinnerBubur1.setModel(new SpinnerNumberModel(0, 0, 10, 1));
+        jSpinnerBubur2.setModel(new SpinnerNumberModel(0, 0, 10, 1));
+        jSpinnerBubur3.setModel(new SpinnerNumberModel(0, 0, 10, 1));
+
+        tfOrderFullname.setText(currentUser.getUser_fullName());
+        tfOrderNoTelp.setText(currentUser.getUser_phoneNumber());
+        tfOrderAlamat.setText(currentUser.getUser_address());
+
+        buburGowes.loadOrdersData();
+
+        /*
         TableColumnModel columnModel = tabelOrder.getColumnModel();
         DefaultTableCellRenderer cellRenderer = new DefaultTableCellRenderer();
 
@@ -62,8 +75,7 @@ public class CustomerMain extends javax.swing.JFrame {
         cellRenderer.setHorizontalAlignment(CENTER);
         columnModel.getColumn(1).setCellRenderer(cellRenderer);
         columnModel.getColumn(2).setCellRenderer(cellRenderer);
-*/
-        buburGowes.loadOrdersData(tableModel, CustomerMain.currentUser);
+         */
     }
 
     /**
@@ -77,6 +89,7 @@ public class CustomerMain extends javax.swing.JFrame {
 
         jLabel12 = new javax.swing.JLabel();
         buttonGroup1 = new javax.swing.ButtonGroup();
+        btn_edit = new javax.swing.JButton();
         jPanelMain = new javax.swing.JPanel();
         jPanelNavBar = new javax.swing.JPanel();
         jPanel13 = new javax.swing.JPanel();
@@ -127,32 +140,33 @@ public class CustomerMain extends javax.swing.JFrame {
         jLabelKeranjang3 = new javax.swing.JLabel();
         jPanelOrder = new javax.swing.JPanel();
         jPanel23 = new javax.swing.JPanel();
-        jLabel30 = new javax.swing.JLabel();
         jLabel31 = new javax.swing.JLabel();
         jLabel32 = new javax.swing.JLabel();
         jLabel33 = new javax.swing.JLabel();
         jLabel34 = new javax.swing.JLabel();
-        tfOrderId = new javax.swing.JTextField();
         tfOrderFullname = new javax.swing.JTextField();
+        tfOrderNoTelp = new javax.swing.JTextField();
+        tfOrderAlamat = new javax.swing.JTextField();
         btn_hapus = new javax.swing.JButton();
         btn_reset = new javax.swing.JButton();
-        btn_edit = new javax.swing.JButton();
         btn_tambah = new javax.swing.JButton();
-        tfOrderNoTelp = new javax.swing.JTextField();
         jLabel36 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tabelOrder = new javax.swing.JTable();
-        tfOrderAlamat = new javax.swing.JTextField();
-        jSpinner1 = new javax.swing.JSpinner();
-        jSpinner2 = new javax.swing.JSpinner();
-        jSpinner3 = new javax.swing.JSpinner();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jCheckBox3 = new javax.swing.JCheckBox();
+        jSpinnerBubur1 = new javax.swing.JSpinner();
+        jSpinnerBubur2 = new javax.swing.JSpinner();
+        jSpinnerBubur3 = new javax.swing.JSpinner();
+        jLabelOrderBubur1 = new javax.swing.JLabel();
+        jLabelOrderBubur2 = new javax.swing.JLabel();
+        jLabelOrderBubur3 = new javax.swing.JLabel();
         jPanelAboutUs = new javax.swing.JPanel();
 
         jLabel12.setFont(new java.awt.Font("Poppins SemiBold", 2, 36)); // NOI18N
         jLabel12.setText("Abis gowes belum sarapan ?");
+
+        btn_edit.setBackground(new java.awt.Color(97, 151, 63));
+        btn_edit.setForeground(new java.awt.Color(255, 255, 255));
+        btn_edit.setText("Edit");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -326,7 +340,7 @@ public class CustomerMain extends javax.swing.JFrame {
                         .addGroup(jPanelNavBarLayout.createSequentialGroup()
                                 .addGap(27, 27, 27)
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 252, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 249, Short.MAX_VALUE)
                                 .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -496,6 +510,11 @@ public class CustomerMain extends javax.swing.JFrame {
         jLabelRating1.setText("4.4");
 
         jPanelKeranjang1.setBackground(new java.awt.Color(97, 151, 63));
+        jPanelKeranjang1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanelKeranjang1MouseClicked(evt);
+            }
+        });
 
         jLabelKeranjang1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/buburgowes/assets/images/cart.png"))); // NOI18N
 
@@ -620,41 +639,39 @@ public class CustomerMain extends javax.swing.JFrame {
         jPanelBubur2Layout.setHorizontalGroup(
                 jPanelBubur2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelBubur2Layout.createSequentialGroup()
-                                .addGroup(jPanelBubur2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addGroup(jPanelBubur2Layout.createSequentialGroup()
-                                                .addGap(14, 14, 14)
-                                                .addGroup(jPanelBubur2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                        .addGroup(jPanelBubur2Layout.createSequentialGroup()
-                                                                .addGroup(jPanelBubur2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                                        .addComponent(jLabelBubur2, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
-                                                                        .addComponent(jLabelHarga2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                                                .addGap(103, 103, 103))
-                                                        .addGroup(jPanelBubur2Layout.createSequentialGroup()
-                                                                .addComponent(jLanelStar2)
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addComponent(jLabelRating2)
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                .addComponent(jPanelKeranjang2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addGap(9, 9, 9))))
-                                        .addGroup(jPanelBubur2Layout.createSequentialGroup()
-                                                .addContainerGap()
-                                                .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, 269, Short.MAX_VALUE)))
+                                .addContainerGap()
+                                .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, 269, Short.MAX_VALUE)
                                 .addGap(14, 14, 14))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelBubur2Layout.createSequentialGroup()
+                                .addGap(14, 14, 14)
+                                .addGroup(jPanelBubur2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanelBubur2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(jLabelBubur2, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
+                                                .addComponent(jLabelHarga2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGroup(jPanelBubur2Layout.createSequentialGroup()
+                                                .addComponent(jLanelStar2)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jLabelRating2)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jPanelKeranjang2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(23, 23, 23))
         );
         jPanelBubur2Layout.setVerticalGroup(
                 jPanelBubur2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanelBubur2Layout.createSequentialGroup()
                                 .addGap(21, 21, 21)
-                                .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabelBubur2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabelHarga2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanelBubur2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLanelStar2)
-                                        .addComponent(jLabelRating2)
-                                        .addComponent(jPanelKeranjang2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanelBubur2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jPanelKeranjang2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(jPanelBubur2Layout.createSequentialGroup()
+                                                .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(jLabelBubur2)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jLabelHarga2)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(jPanelBubur2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(jLanelStar2)
+                                                        .addComponent(jLabelRating2))))
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -705,14 +722,16 @@ public class CustomerMain extends javax.swing.JFrame {
                                 .addGroup(jPanelBubur3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jLabelGambarBubur3, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGroup(jPanelBubur3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                .addComponent(jLabelBubur3, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGroup(jPanelBubur3Layout.createSequentialGroup()
-                                                        .addComponent(jLanelStar3)
-                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                        .addComponent(jLabelRating3)
+                                                        .addGroup(jPanelBubur3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addGroup(jPanelBubur3Layout.createSequentialGroup()
+                                                                        .addComponent(jLanelStar3)
+                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                        .addComponent(jLabelRating3))
+                                                                .addComponent(jLabelHarga3, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(jPanelKeranjang3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addComponent(jLabelBubur3, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(jLabelHarga3, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addComponent(jPanelKeranjang3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                 .addContainerGap(23, Short.MAX_VALUE))
         );
         jPanelBubur3Layout.setVerticalGroup(
@@ -727,7 +746,7 @@ public class CustomerMain extends javax.swing.JFrame {
                                                 .addComponent(jLabelBubur3)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(jLabelHarga3)
-                                                .addGap(18, 18, 18)
+                                                .addGap(6, 6, 6)
                                                 .addGroup(jPanelBubur3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addComponent(jLanelStar3)
                                                         .addComponent(jLabelRating3))))
@@ -764,8 +783,6 @@ public class CustomerMain extends javax.swing.JFrame {
 
         jPanel23.setBackground(new java.awt.Color(255, 254, 220));
 
-        jLabel30.setText("No");
-
         jLabel31.setText("Nama");
 
         jLabel32.setText("Alamat");
@@ -774,21 +791,28 @@ public class CustomerMain extends javax.swing.JFrame {
 
         jLabel34.setText("Jumlah");
 
-        tfOrderId.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfOrderIdActionPerformed(evt);
-            }
-        });
-
         tfOrderFullname.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tfOrderFullnameActionPerformed(evt);
             }
         });
 
+        tfOrderNoTelp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfOrderNoTelpActionPerformed(evt);
+            }
+        });
+
+        tfOrderAlamat.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+
         btn_hapus.setBackground(new java.awt.Color(97, 151, 63));
         btn_hapus.setForeground(new java.awt.Color(255, 255, 255));
         btn_hapus.setText("Hapus");
+        btn_hapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_hapusActionPerformed(evt);
+            }
+        });
 
         btn_reset.setBackground(new java.awt.Color(97, 151, 63));
         btn_reset.setForeground(new java.awt.Color(255, 255, 255));
@@ -799,22 +823,12 @@ public class CustomerMain extends javax.swing.JFrame {
             }
         });
 
-        btn_edit.setBackground(new java.awt.Color(97, 151, 63));
-        btn_edit.setForeground(new java.awt.Color(255, 255, 255));
-        btn_edit.setText("Edit");
-
         btn_tambah.setBackground(new java.awt.Color(97, 151, 63));
         btn_tambah.setForeground(new java.awt.Color(255, 255, 255));
-        btn_tambah.setText("Tambah");
+        btn_tambah.setText("Pesan");
         btn_tambah.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_tambahActionPerformed(evt);
-            }
-        });
-
-        tfOrderNoTelp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfOrderNoTelpActionPerformed(evt);
             }
         });
 
@@ -828,83 +842,77 @@ public class CustomerMain extends javax.swing.JFrame {
                 new String[]{
                         "No", "Nama", "No Telp", "Alamat", "Pesanan", "Jumlah", "Total"
                 }
-        ));
-        tabelOrder.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tabelOrderMouseClicked(evt);
+        ) {
+            boolean[] canEdit = new boolean[]{
+                    false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
             }
         });
+        tabelOrder.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(tabelOrder);
+        if (tabelOrder.getColumnModel().getColumnCount() > 0) {
+            tabelOrder.getColumnModel().getColumn(0).setResizable(false);
+        }
 
-        jCheckBox1.setText("Bubur Polos");
-        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox1ActionPerformed(evt);
-            }
-        });
+        jSpinnerBubur1.setName(""); // NOI18N
+        jSpinnerBubur1.setRequestFocusEnabled(false);
 
-        jCheckBox2.setText("Bubur Ayam");
-        jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox2ActionPerformed(evt);
-            }
-        });
+        jLabelOrderBubur1.setText("Bubur Polos");
 
-        jCheckBox3.setText("Bubur Kumplit");
+        jLabelOrderBubur2.setText("Bubur Ayam");
+
+        jLabelOrderBubur3.setText("Bubur Ayam Ati Ampela");
 
         javax.swing.GroupLayout jPanel23Layout = new javax.swing.GroupLayout(jPanel23);
         jPanel23.setLayout(jPanel23Layout);
         jPanel23Layout.setHorizontalGroup(
                 jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel23Layout.createSequentialGroup()
-                                .addGap(27, 27, 27)
-                                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addGroup(jPanel23Layout.createSequentialGroup()
+                                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel23Layout.createSequentialGroup()
+                                                .addGap(27, 27, 27)
                                                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(jLabel30, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                         .addComponent(jLabel32, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                                 .addComponent(jLabel31, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                                 .addComponent(jLabel36)))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                        .addComponent(tfOrderFullname)
+                                                .addGap(18, 18, 18)
+                                                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addComponent(tfOrderAlamat)
                                                         .addComponent(tfOrderNoTelp)
-                                                        .addComponent(tfOrderId, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                        .addGroup(jPanel23Layout.createSequentialGroup()
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(tfOrderFullname, javax.swing.GroupLayout.Alignment.TRAILING)))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel23Layout.createSequentialGroup()
+                                                .addGap(95, 95, 95)
                                                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel23Layout.createSequentialGroup()
-                                                                .addComponent(btn_hapus)
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addComponent(btn_reset)
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addComponent(btn_edit)
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addComponent(btn_tambah))
+                                                                .addComponent(jLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addGap(109, 109, 109)
+                                                                .addComponent(jLabel34, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addGap(60, 60, 60))
                                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel23Layout.createSequentialGroup()
                                                                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                                        .addComponent(jCheckBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                        .addComponent(jCheckBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                        .addComponent(jCheckBox3, javax.swing.GroupLayout.Alignment.LEADING)
-                                                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel23Layout.createSequentialGroup()
-                                                                                .addGap(17, 17, 17)
-                                                                                .addComponent(jLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                                                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel23Layout.createSequentialGroup()
-                                                                                .addGap(81, 81, 81)
-                                                                                .addComponent(jLabel34, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                .addGap(60, 60, 60))
-                                                                        .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                                                .addGroup(jPanel23Layout.createSequentialGroup()
-                                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                        .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel23Layout.createSequentialGroup()
-                                                                                        .addGap(73, 73, 73)
-                                                                                        .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                                                                .addComponent(jSpinner2)
-                                                                                                .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))))))))
+                                                                        .addGroup(jPanel23Layout.createSequentialGroup()
+                                                                                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                        .addComponent(jLabelOrderBubur3)
+                                                                                        .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                                                                .addComponent(jLabelOrderBubur1)
+                                                                                                .addComponent(jLabelOrderBubur2)))
+                                                                                .addGap(54, 54, 54)
+                                                                                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                                                        .addComponent(jSpinnerBubur3, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                                                                .addComponent(jSpinnerBubur2, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                                .addComponent(jSpinnerBubur1, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                                                        .addGroup(jPanel23Layout.createSequentialGroup()
+                                                                                .addComponent(btn_hapus)
+                                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                                .addComponent(btn_reset)
+                                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                                .addComponent(btn_tambah)))
+                                                                .addGap(45, 45, 45)))))
                                 .addGap(37, 37, 37)
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(42, 42, 42))
@@ -915,10 +923,7 @@ public class CustomerMain extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(jPanel23Layout.createSequentialGroup()
-                                                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(jLabel30)
-                                                        .addComponent(tfOrderId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addGap(15, 15, 15)
+                                                .addGap(37, 37, 37)
                                                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                                         .addComponent(jLabel31)
                                                         .addComponent(tfOrderFullname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -936,22 +941,24 @@ public class CustomerMain extends javax.swing.JFrame {
                                                         .addComponent(jLabel34))
                                                 .addGap(18, 18, 18)
                                                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(jCheckBox1)
-                                                        .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(jCheckBox2)
-                                                        .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(jCheckBox3))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
+                                                        .addGroup(jPanel23Layout.createSequentialGroup()
+                                                                .addComponent(jSpinnerBubur1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(jSpinnerBubur2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(jSpinnerBubur3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addGroup(jPanel23Layout.createSequentialGroup()
+                                                                .addComponent(jLabelOrderBubur1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(jLabelOrderBubur2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(jLabelOrderBubur3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addGap(40, 40, 40)
                                                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                                         .addComponent(btn_hapus)
                                                         .addComponent(btn_reset)
-                                                        .addComponent(btn_edit)
-                                                        .addComponent(btn_tambah)))
+                                                        .addComponent(btn_tambah))
+                                                .addGap(0, 21, Short.MAX_VALUE))
                                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                                 .addGap(54, 54, 54))
         );
@@ -1036,54 +1043,45 @@ public class CustomerMain extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jPanel13AncestorAdded
 
-    private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox2ActionPerformed
-
-    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox1ActionPerformed
-
     private void tfOrderNoTelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfOrderNoTelpActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tfOrderNoTelpActionPerformed
 
     private void btn_tambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_tambahActionPerformed
-        //        try {
-        //            // TODO add your handling code here:
-        //            Connection cn = DriverManager.getConnection("jdbc:mysql://localhost/buburgowes","root","");
-        //            cn.createStatement().executeUpdate("insert into bubur values"+
-        //                    "('"+
-        //                    id.getText()+
-        //                    "','"+
-        //                    nama.getText()+
-        //                    "','"+
-        //                    no_hp.getText()+
-        //                    "','"+
-        //                    pesanan.getText()+
-        //                    "','"+
-        //                    pesanan.getText()+
-        //                    "','"+
-        //                    jumlah.getText()+
-        //                    "','"+
-        //                    total_harga.getText()+"')");
-        //            tampilkan();
-        //        } catch (SQLException ex) {
-        //            JOptionPane.showMessageDialog(null,"Data masih kosong");
-        //        }
+        // TODO add your handling code here:
+
+        String nama = tfOrderFullname.getText();
+        String noTelp = tfOrderNoTelp.getText();
+        String alamat = tfOrderAlamat.getText();
+
+        //variabel jumlah setiap pesanan
+        int jumlahBubur1 = (int) jSpinnerBubur1.getValue();
+        int jumlahBubur2 = (int) jSpinnerBubur2.getValue();
+        int jumlahBubur3 = (int) jSpinnerBubur3.getValue();
+
+        // varible for current date
+        /*Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        String strDate = formatter.format(date);*/
+
+        buburGowes.executeOrder(this, nama, noTelp, alamat, jumlahBubur1, jumlahBubur2, jumlahBubur3);
+
+        // Clear all spinner after order is done
+        jSpinnerBubur1.setValue(0);
+        jSpinnerBubur2.setValue(0);
+        jSpinnerBubur3.setValue(0);
     }//GEN-LAST:event_btn_tambahActionPerformed
 
     private void btn_resetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_resetActionPerformed
         // TODO add your handling code here:
+        jSpinnerBubur1.setValue(0);
+        jSpinnerBubur2.setValue(0);
+        jSpinnerBubur3.setValue(0);
     }//GEN-LAST:event_btn_resetActionPerformed
 
     private void tfOrderFullnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfOrderFullnameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tfOrderFullnameActionPerformed
-
-    private void tfOrderIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfOrderIdActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tfOrderIdActionPerformed
 
     private void jButtonHomeToMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonHomeToMenuActionPerformed
         // TODO add your handling code here:
@@ -1094,9 +1092,32 @@ public class CustomerMain extends javax.swing.JFrame {
         jTabbedPane1.setSelectedIndex(1);
     }//GEN-LAST:event_jButtonHomeToMenuMouseClicked
 
-    private void tabelOrderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelOrderMouseClicked
+    private void jPanelKeranjang1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanelKeranjang1MouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_tabelOrderMouseClicked
+        if (jSpinnerBubur1.getValue().equals(0)) jSpinnerBubur1.setValue(1);
+        jTabbedPane1.setSelectedIndex(2);
+    }//GEN-LAST:event_jPanelKeranjang1MouseClicked
+
+    private void btn_hapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_hapusActionPerformed
+        // TODO add your handling code here:
+        // remove selected row from the database
+        int row = tabelOrder.getSelectedRow();
+
+        if (row != -1) {
+            try {
+                String id = tabelOrder.getValueAt(row, 0).toString();
+
+                buburGowes.deleteOrderData(
+                        this,
+                        id,
+                        row
+                );
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }//GEN-LAST:event_btn_hapusActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1139,12 +1160,8 @@ public class CustomerMain extends javax.swing.JFrame {
     private javax.swing.JButton btn_tambah;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButtonHomeToMenu;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
@@ -1169,6 +1186,9 @@ public class CustomerMain extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelKeranjang2;
     private javax.swing.JLabel jLabelKeranjang3;
     private javax.swing.JLabel jLabelMainIcon;
+    private javax.swing.JLabel jLabelOrderBubur1;
+    private javax.swing.JLabel jLabelOrderBubur2;
+    private javax.swing.JLabel jLabelOrderBubur3;
     private javax.swing.JLabel jLabelRating1;
     private javax.swing.JLabel jLabelRating2;
     private javax.swing.JLabel jLabelRating3;
@@ -1199,16 +1219,14 @@ public class CustomerMain extends javax.swing.JFrame {
     private javax.swing.JPanel jPanelOrder;
     private javax.swing.JPanel jPanelToLogin;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JSpinner jSpinner2;
-    private javax.swing.JSpinner jSpinner3;
+    private javax.swing.JSpinner jSpinnerBubur1;
+    private javax.swing.JSpinner jSpinnerBubur2;
+    private javax.swing.JSpinner jSpinnerBubur3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable tabelOrder;
     private javax.swing.JTextField tfOrderAlamat;
     private javax.swing.JTextField tfOrderFullname;
-    private javax.swing.JTextField tfOrderId;
     private javax.swing.JTextField tfOrderNoTelp;
     // End of variables declaration//GEN-END:variables
-
 
 }

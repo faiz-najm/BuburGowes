@@ -3,7 +3,7 @@ package com.buburgowes.model;
 import java.util.ArrayList;
 
 /**
- * @author andre
+ * @author faiz
  */
 public class Order {
     private String orderNumber;
@@ -27,7 +27,8 @@ public class Order {
         return orderDetails;
     }
 
-    public void addOrderDetail(OrderDetail orderDetail) {
+    public Order addOrderDetail(OrderDetail orderDetail) {
         this.orderDetails.add(orderDetail);
+        return this;
     }
 }
