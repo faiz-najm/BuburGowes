@@ -1,20 +1,11 @@
 package com.buburgowes.controller;
 
-import com.mysql.cj.conf.ConnectionUrlParser;
-
 import javax.swing.table.DefaultTableModel;
 
 public class OrderTabelModel extends DefaultTableModel {
 
-    public OrderTabelModel() {
-        super(new String[]{
-                "No",
-                "Nama",
-                "No Telp",
-                "Alamat",
-                "Pesanan",
-                "Jumlah",
-                "Total"}, 0);
+    public OrderTabelModel(String[] strings, int i) {
+        super(strings, i);
     }
 
     public void clearDataTable() {

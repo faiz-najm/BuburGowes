@@ -250,15 +250,16 @@ public class CustomerMain extends javax.swing.JFrame {
         jLabel8.setFont(new java.awt.Font("Poppins SemiBold", 0, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("About Us");
+        jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
         jPanel15.setLayout(jPanel15Layout);
         jPanel15Layout.setHorizontalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel15Layout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
+                .addContainerGap(21, Short.MAX_VALUE)
                 .addComponent(jLabel8)
-                .addGap(20, 20, 20))
+                .addGap(19, 19, 19))
         );
         jPanel15Layout.setVerticalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -267,6 +268,8 @@ public class CustomerMain extends javax.swing.JFrame {
                 .addComponent(jLabel8)
                 .addContainerGap(9, Short.MAX_VALUE))
         );
+
+        jLabel8.getAccessibleContext().setAccessibleDescription("");
 
         jPanel16.setBackground(new java.awt.Color(97, 151, 63));
         jPanel16.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -314,10 +317,10 @@ public class CustomerMain extends javax.swing.JFrame {
         jPanelToLogin.setLayout(jPanelToLoginLayout);
         jPanelToLoginLayout.setHorizontalGroup(
             jPanelToLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelToLoginLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabelUserState, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGroup(jPanelToLoginLayout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(jLabelUserState)
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         jPanelToLoginLayout.setVerticalGroup(
             jPanelToLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -337,7 +340,7 @@ public class CustomerMain extends javax.swing.JFrame {
             .addGroup(jPanelNavBarLayout.createSequentialGroup()
                 .addGap(27, 27, 27)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 249, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 252, Short.MAX_VALUE)
                 .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -363,7 +366,7 @@ public class CustomerMain extends javax.swing.JFrame {
             .addGroup(jPanelNavBarLayout.createSequentialGroup()
                 .addGap(31, 31, 31)
                 .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
 
         jPanelMain.add(jPanelNavBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1050, 110));
@@ -1019,36 +1022,6 @@ public class CustomerMain extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jPanel16MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel16MouseClicked
-        // TODO add your handling code here:
-        jTabbedPane1.setSelectedIndex(0);
-    }//GEN-LAST:event_jPanel16MouseClicked
-
-    private void jPanel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel13MouseClicked
-        // TODO add your handling code here:
-        jTabbedPane1.setSelectedIndex(1);
-    }//GEN-LAST:event_jPanel13MouseClicked
-
-    private void jPanel14MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel14MouseClicked
-        // TODO add your handling code here:
-        jTabbedPane1.setSelectedIndex(2);
-    }//GEN-LAST:event_jPanel14MouseClicked
-
-    private void jPanel15MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel15MouseClicked
-        // TODO add your handling code here:
-        jTabbedPane1.setSelectedIndex(3);
-    }//GEN-LAST:event_jPanel15MouseClicked
-
-    private void jPanelToLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanelToLoginMouseClicked
-        // TODO add your handling code here:
-        jLabelUserState.setText("Login");
-        buburGowes.goToLogin(this);
-    }//GEN-LAST:event_jPanelToLoginMouseClicked
-
-    private void jPanel13AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jPanel13AncestorAdded
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jPanel13AncestorAdded
-
     private void tfOrderNoTelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfOrderNoTelpActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tfOrderNoTelpActionPerformed
@@ -1135,6 +1108,36 @@ public class CustomerMain extends javax.swing.JFrame {
          if (jSpinnerBubur3.getValue().equals(0)) jSpinnerBubur3.setValue(1);
         jTabbedPane1.setSelectedIndex(2);
     }//GEN-LAST:event_jPanelKeranjang3MouseClicked
+
+    private void jPanelToLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanelToLoginMouseClicked
+        // TODO add your handling code here:
+        jLabelUserState.setText("Login");
+        buburGowes.goToLogin(this);
+    }//GEN-LAST:event_jPanelToLoginMouseClicked
+
+    private void jPanel16MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel16MouseClicked
+        // TODO add your handling code here:
+        jTabbedPane1.setSelectedIndex(0);
+    }//GEN-LAST:event_jPanel16MouseClicked
+
+    private void jPanel15MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel15MouseClicked
+        // TODO add your handling code here:
+        jTabbedPane1.setSelectedIndex(3);
+    }//GEN-LAST:event_jPanel15MouseClicked
+
+    private void jPanel14MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel14MouseClicked
+        // TODO add your handling code here:
+        jTabbedPane1.setSelectedIndex(2);
+    }//GEN-LAST:event_jPanel14MouseClicked
+
+    private void jPanel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel13MouseClicked
+        // TODO add your handling code here:
+        jTabbedPane1.setSelectedIndex(1);
+    }//GEN-LAST:event_jPanel13MouseClicked
+
+    private void jPanel13AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jPanel13AncestorAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jPanel13AncestorAdded
 
     /**
      * @param args the command line arguments

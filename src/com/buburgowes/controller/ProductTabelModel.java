@@ -6,10 +6,10 @@ public class ProductTabelModel extends DefaultTableModel {
 
     public ProductTabelModel() {
         super(new String[]{
-                "No",
-                "Nama",
-                "Harga",
-                "isAvailable"}, 0);
+                "Nama Produk",
+                "Harga Produk",
+                "Detail Produk",
+                "Status Ketersediaan"}, 0);
     }
 
     public void clearDataTable() {

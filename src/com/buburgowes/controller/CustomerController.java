@@ -16,7 +16,7 @@ public class CustomerController extends Controller {
 
     public CustomerController() {
         super();
-        tabelModel = new OrderTabelModel();
+        tabelModel = new OrderTabelModel(new String[]{"No", "Nama", "No Telp", "Alamat", "Pesanan", "Jumlah", "Total"}, 0);
         setCurrentUser(currentUser);
 
     }

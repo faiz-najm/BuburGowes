@@ -1,6 +1,7 @@
 package com.buburgowes.controller.admin;
 
 import com.buburgowes.controller.Controller;
+import com.buburgowes.controller.OrderTabelModel;
 import com.buburgowes.controller.ProductTabelModel;
 import com.buburgowes.model.Admin;
 import com.buburgowes.model.Order;
@@ -14,12 +15,22 @@ import java.sql.*;
 public class AdminController extends Controller {
 
     public Admin currentUser;
-    public ProductTabelModel tabelModel;
+    public ProductTabelModel productTabelModel;
+
+    public OrderTabelModel orderTabelModel;
+
 
     public AdminController() {
         super();
-        tabelModel = new ProductTabelModel();
+        productTabelModel = new ProductTabelModel();
+        orderTabelModel = new OrderTabelModel(
+                new String[]{
+                        "Order Code",
+                        "Costumer",
+                        "Product"}, 0);
+
         loadProductTabel();
+        loadOrderTabel();
         setCurrentUser(currentUser);
 
         // Load order data if not loaded
@@ -82,10 +93,88 @@ public class AdminController extends Controller {
                                 productPrice,
                                 isAvailable);
 
-                        tempOrder.addOrderDetail(
+                    }
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void loadOrderTabel() {
+        // Clear table data
+        orderTabelModel.clearDataTable();
+        getOrderList().clear();
+        Product product;
+
+        try {
+            Connection conn = data.getConnection();
+            String getQuery = """
+                    SELECT *
+                    FROM m_orders
+                    """;
+
+            Statement state = conn.createStatement();
+            ResultSet rset = state.executeQuery(getQuery);
+
+            String orderNumber;
+            int idUser = 0;
+
+            while (rset.next()) {
+                orderNumber = rset.getString("orderNumber");
+                idUser = rset.getInt("id_m_user");
+                addOrders(new Order(orderNumber));
+            }
+
+            for (Order order : getOrderList()) {
+                try {
+                    int jumlahPesanan, totalHarga;
+
+                    String getData = "SELECT *\n" +
+                            "FROM m_orderdetails\n" +
+                            "JOIN m_product" +
+                            " mp on mp.id = m_orderdetails.id_m_product\n" +
+                            "WHERE id_m_orders = '" + order.getOrderNumber() + "'";
+
+                    PreparedStatement ps = conn.prepareStatement(getData);
+
+                    ResultSet orderSet = ps.executeQuery();
+
+                    while (orderSet.next()) {
+                        // Get data from ResultSet orderDetails table
+                        jumlahPesanan = orderSet.getInt("jumlahPesanan");
+                        totalHarga = orderSet.getInt("totalHarga");
+
+                        // Get data from ResultSet product table
+                        int productCode = orderSet.getInt("id_m_product");
+                        String productName = orderSet.getString("product_name");
+                        String productDesc = orderSet.getString("product_desc");
+                        int productPrice = orderSet.getInt("product_price");
+                        int isAvailable = orderSet.getInt("is_available");
+
+                        product = new Product(productCode,
+                                productName,
+                                productDesc,
+                                productPrice,
+                                isAvailable);
+
+                        order.addOrderDetail(
                                 new OrderDetail(jumlahPesanan,
                                         totalHarga, product
                                 ));
+
+                        int orderDetailSize = order.getOrderDetails().size() - 1;
+
+                        // overide Object contructor class
+                        Object[] data = {
+                                order.getOrderNumber(),
+                                idUser,
+                                order.getOrderDetails().get(orderDetailSize).getProduct().getProduct_name()
+                        };
+
+                        orderTabelModel.addRow(data);
 
                     }
                 } catch (SQLException e) {
@@ -109,7 +198,7 @@ public class AdminController extends Controller {
     // Load product data for table
     public void loadProductTabel() {
 
-        tabelModel.clearDataTable();
+        productTabelModel.clearDataTable();
         loadProductData();
         int index = productList.size() - 1;
 
@@ -122,7 +211,7 @@ public class AdminController extends Controller {
 
             // Clear table data before load new data
             while (rset.next()) {
-                this.tabelModel.addRow(new Object[]{
+                this.productTabelModel.addRow(new Object[]{
                         productList.get(index).getProduct_name(),
                         productList.get(index).getProduct_price(),
                         productList.get(index).getProduct_desc(),
