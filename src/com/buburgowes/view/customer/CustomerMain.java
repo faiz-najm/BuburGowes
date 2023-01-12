@@ -37,8 +37,6 @@ public class CustomerMain extends javax.swing.JFrame {
             System.exit(0);
         }
 
-        buburGowes.loadProductData();
-
         // Membuat tabel order
 
         tabelOrder.setModel(buburGowes.tabelModel);
@@ -613,6 +611,11 @@ public class CustomerMain extends javax.swing.JFrame {
         jLabelRating2.setText("4.9");
 
         jPanelKeranjang2.setBackground(new java.awt.Color(97, 151, 63));
+        jPanelKeranjang2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanelKeranjang2MouseClicked(evt);
+            }
+        });
 
         jLabelKeranjang2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/buburgowes/assets/images/cart.png"))); // NOI18N
 
@@ -692,6 +695,11 @@ public class CustomerMain extends javax.swing.JFrame {
         jLabelRating3.setText("4.6");
 
         jPanelKeranjang3.setBackground(new java.awt.Color(97, 151, 63));
+        jPanelKeranjang3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanelKeranjang3MouseClicked(evt);
+            }
+        });
 
         jLabelKeranjang3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/buburgowes/assets/images/cart.png"))); // NOI18N
 
@@ -813,7 +821,7 @@ public class CustomerMain extends javax.swing.JFrame {
 
         btn_reset.setBackground(new java.awt.Color(97, 151, 63));
         btn_reset.setForeground(new java.awt.Color(255, 255, 255));
-        btn_reset.setText("Reset");
+        btn_reset.setText("Ulangi");
         btn_reset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_resetActionPerformed(evt);
@@ -1115,6 +1123,18 @@ public class CustomerMain extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btn_hapusActionPerformed
+
+    private void jPanelKeranjang2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanelKeranjang2MouseClicked
+        // TODO add your handling code here:
+         if (jSpinnerBubur2.getValue().equals(0)) jSpinnerBubur2.setValue(1);
+        jTabbedPane1.setSelectedIndex(2);
+    }//GEN-LAST:event_jPanelKeranjang2MouseClicked
+
+    private void jPanelKeranjang3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanelKeranjang3MouseClicked
+        // TODO add your handling code here:
+         if (jSpinnerBubur3.getValue().equals(0)) jSpinnerBubur3.setValue(1);
+        jTabbedPane1.setSelectedIndex(2);
+    }//GEN-LAST:event_jPanelKeranjang3MouseClicked
 
     /**
      * @param args the command line arguments

@@ -13,12 +13,16 @@ public class CustomerController extends Controller {
 
     public Customer currentUser;
     public OrderTabelModel tabelModel;
-    private int inc = 1;
 
     public CustomerController() {
         super();
         tabelModel = new OrderTabelModel();
         setCurrentUser(currentUser);
+
+    }
+
+    @Override
+    public void loadOrderData() {
 
     }
 
@@ -39,8 +43,6 @@ public class CustomerController extends Controller {
         Product product;
 
         try {
-//            ArrayList<TempModel> tempList = new ArrayList<>();
-
             Connection conn = data.getConnection();
             String getQuery = "SELECT *\n" +
                     "FROM m_orders\n" +
@@ -94,9 +96,6 @@ public class CustomerController extends Controller {
                                 ));
 
                         int orderDetailSize = order.getOrderDetails().size() - 1;
-                        int orderSize = currentUser.getOrders().size() - 1;
-
-                        orderList.add(currentUser.getOrders().get(orderSize));
 
                         // overide Object contructor class
                         Object[] data = {
@@ -518,44 +517,6 @@ public class CustomerController extends Controller {
             System.out.println(e.getMessage());
         }
     }*/
-    // Load product data for table
-
-    public void loadProductTabel() {
-        try {
-            Connection conn = data.getConnection();
-            String query = "SELECT * FROM m_product";
-
-            Statement state = conn.createStatement();
-            ResultSet rset = state.executeQuery(query);
-
-            while (rset.next()) {
-                int productCode = rset.getInt("id");
-                String productName = rset.getString("product_name");
-                String productDesc = rset.getString("product_desc");
-                int productPrice = rset.getInt("product_price");
-                int productStatus = rset.getInt("is_available");
-
-                addProduct(new Product(
-                        productCode, productName,
-                        productDesc,
-                        productStatus,
-                        productPrice
-                ));
-
-                int index = productList.size() - 1;
-
-                this.tabelModel.addRow(new Object[]{
-                        productList.get(index).getProduct_name(),
-                        productList.get(index).getProduct_price(),
-                        productList.get(index).getProduct_desc(),
-                        productList.get(index).getAvailableStatus()
-                });
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-    // Customer transaction
 
     // Update saldo user
     /*public void updateSaldoUser(

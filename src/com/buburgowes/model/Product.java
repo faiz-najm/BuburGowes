@@ -33,7 +33,7 @@ public class Product {
     public String getAvailableStatus() {
 
         return switch (getIs_available()) {
-            case 0 -> "Tidak Tersedia";
+            case 0 -> "Habis";
             case 1 -> "Tersedia";
             case 2 -> "Pre Order";
             default -> "";

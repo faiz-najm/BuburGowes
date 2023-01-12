@@ -13,11 +13,8 @@ public class ProductTabelModel extends DefaultTableModel {
     }
 
     public void clearDataTable() {
-        int rowCount = this.getRowCount();
-        //Remove rows one by one from the end of the table
-        for (int i = rowCount - 1; i >= 0; i--) {
-            this.removeRow(i);
-        }
+        this.setRowCount(0);
+        this.fireTableRowsDeleted(0, this.getRowCount());
     }
 
     @Override

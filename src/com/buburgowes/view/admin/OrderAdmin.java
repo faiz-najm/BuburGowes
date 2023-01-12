@@ -13,7 +13,7 @@ import java.util.Objects;
 /**
  * @author Sayyidusy
  */
-public class AdminMain extends javax.swing.JFrame {
+public class OrderAdmin extends javax.swing.JFrame {
 
     private final AdminController buburGowes = new AdminController();
     private static Admin currentUser;
@@ -21,7 +21,7 @@ public class AdminMain extends javax.swing.JFrame {
     /**
      * Creates new form Admin
      */
-    public AdminMain(Admin currentUser) {
+    public OrderAdmin(Admin currentUser) {
 
         if (buburGowes.checkDBConnection(this)) {
             this.setTitle("Bubur Gowes - Customer");
@@ -105,15 +105,10 @@ public class AdminMain extends javax.swing.JFrame {
         btnDeleteProduk.setBackground(new java.awt.Color(97, 151, 63));
         btnDeleteProduk.setForeground(new java.awt.Color(255, 255, 255));
         btnDeleteProduk.setText("Delete Product");
-        btnDeleteProduk.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteProdukActionPerformed(evt);
-            }
-        });
 
         jLabelStatus.setText("Status Ketersediaan");
 
-        jComboBoxStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tersedia", "Habis" }));
+        jComboBoxStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tersedia", "Kosong" }));
         jComboBoxStatus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBoxStatusActionPerformed(evt);
@@ -205,7 +200,7 @@ public class AdminMain extends javax.swing.JFrame {
         jLabelJudul.setBackground(new java.awt.Color(255, 0, 0));
         jLabelJudul.setFont(new java.awt.Font("Poppins", 1, 24)); // NOI18N
         jLabelJudul.setForeground(new java.awt.Color(97, 151, 63));
-        jLabelJudul.setText("TABEL ADMIN");
+        jLabelJudul.setText("ORDERS");
 
         jPanelToLogin.setBackground(new java.awt.Color(97, 151, 63));
         jPanelToLogin.setPreferredSize(new java.awt.Dimension(84, 31));
@@ -252,7 +247,7 @@ public class AdminMain extends javax.swing.JFrame {
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabelJudul)
-                        .addGap(288, 288, 288)
+                        .addGap(347, 347, 347)
                         .addComponent(jPanelToLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(19, 19, 19))))
         );
@@ -335,17 +330,6 @@ public class AdminMain extends javax.swing.JFrame {
 
     private void btnTambahProdukActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahProdukActionPerformed
         // TODO add your handling code here:
-        try {
-            buburGowes.insertProductData(
-                    this,
-                    tfNamaProduk.getText(),
-                    jTextAreaDetail.getText(),
-                    Objects.requireNonNull(jComboBoxStatus.getSelectedItem()).toString(),
-                    tfHargaProduk.getText()
-            );
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
     }//GEN-LAST:event_btnTambahProdukActionPerformed
 
     private void jComboBoxStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxStatusActionPerformed
@@ -380,18 +364,6 @@ public class AdminMain extends javax.swing.JFrame {
         jComboBoxStatus.setSelectedIndex(is_available);
     }//GEN-LAST:event_jTableProdukMouseClicked
 
-    private void btnDeleteProdukActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteProdukActionPerformed
-        // TODO add your handling code here:
-        int row = jTableProduk.getSelectedRow();
-
-        if (row == -1) {
-            JOptionPane.showMessageDialog(this, "Pilih data yang akan dihapus");
-        } else {
-            String productName = jTableProduk.getValueAt(row, 0).toString();
-            buburGowes.deleteProductData(this, productName);
-        }
-    }//GEN-LAST:event_btnDeleteProdukActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -422,7 +394,7 @@ public class AdminMain extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AdminMain(currentUser).setVisible(true);
+                new OrderAdmin(currentUser).setVisible(true);
             }
         });
     }

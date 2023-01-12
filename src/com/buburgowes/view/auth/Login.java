@@ -17,6 +17,7 @@ public class Login extends javax.swing.JFrame {
     /**
      * Creates new form Login
      */
+
     public Login() {
 
         if (buburGowes.checkDBConnection(this)) {
@@ -115,7 +116,7 @@ public class Login extends javax.swing.JFrame {
                 btnLoginActionPerformed(evt);
             }
         });
-
+//
         labelPassword.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
         labelPassword.setText("Password");
 

@@ -54,7 +54,7 @@
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
                           <Component id="jLabelJudul" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="288" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="347" max="-2" attributes="0"/>
                           <Component id="jPanelToLogin" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
                       </Group>
@@ -257,9 +257,6 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Delete Product"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDeleteProdukActionPerformed"/>
-              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabelStatus">
               <Properties>
@@ -271,7 +268,7 @@
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="2">
                     <StringItem index="0" value="Tersedia"/>
-                    <StringItem index="1" value="Habis"/>
+                    <StringItem index="1" value="Kosong"/>
                   </StringArray>
                 </Property>
               </Properties>
@@ -343,7 +340,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="3f" green="97" red="61" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="TABEL ADMIN"/>
+            <Property name="text" type="java.lang.String" value="ORDERS"/>
           </Properties>
         </Component>
         <Container class="javax.swing.JPanel" name="jPanelToLogin">

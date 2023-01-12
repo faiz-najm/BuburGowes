@@ -17,6 +17,10 @@ public class AuthController extends Controller {
         super();
     }
 
+    @Override
+    public void loadOrderData() {
+    }
+
     public void userRegistration(
             JFrame jFrame,
             Component parentComponent,

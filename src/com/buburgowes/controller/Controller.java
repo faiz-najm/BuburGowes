@@ -21,7 +21,15 @@ public abstract class Controller {
 
     public Controller() {
         this.dbConnection(data);
+
+        // Load product data if not loaded
+        if (productList.isEmpty()) {
+            this.loadProductData();
+        }
     }
+
+    // Abstrac method load order data
+    public abstract void loadOrderData();
 
     public void dbConnection(MysqlDataSource data) {
 
@@ -47,7 +55,58 @@ public abstract class Controller {
     }
 
 
+    protected void addProduct(Product product) {
+        productList.add(product);
+    }
+
+    protected void loadProductData() {
+        productList.clear();
+
+        try {
+            Connection conn = data.getConnection();
+            String query = "SELECT * FROM m_product";
+
+            Statement state = conn.createStatement();
+            ResultSet rset = state.executeQuery(query);
+
+            while (rset.next()) {
+                int productCode = rset.getInt("id");
+                String productName = rset.getString("product_name");
+                String productDesc = rset.getString("product_desc");
+                int productPrice = rset.getInt("product_price");
+                int productStatus = rset.getInt("is_available");
+
+                addProduct(new Product(
+                        productCode, productName,
+                        productDesc,
+                        productStatus,
+                        productPrice
+                ));
+
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    protected ArrayList<Order> getOrderList() {
+        return orderList;
+    }
+
+    protected void addOrders(Order order) {
+        orderList.add(order);
+    }
+
+    // Go to login
+    public void goToLogin(JFrame jFrame) {
+        Login login = new Login();
+
+        jFrame.dispose();
+        login.setVisible(true);
+    }
     // Update user account state
+
     public void updateUserState(
             Component parentComponent,
             String username,
@@ -78,295 +137,10 @@ public abstract class Controller {
             );
         }
     }
-    // Insert Product Data
-    /*  public void insertProductData(
-            Component parentComponent,
-            String textName,
-            String textDesc,
-            String comboStatus,
-            String textQuantity,
-            String textPrice,
-            DefaultTableModel tableModel
-    ) {
-        try {
-            String name = "", desc = "";
-            Connection conn = data.getConnection();
 
-            if (!productList.isEmpty()) {
-                String checkQuery = "SELECT * FROM m_product";
-
-                Statement st = conn.createStatement();
-                ResultSet rs = st.executeQuery(checkQuery);
-
-                if (rs.next()) {
-                    name = rs.getString("product_name");
-                    desc = rs.getString("product_desc");
-                }
-
-                if (textName.equals(name) && textDesc.equals(desc)) {
-                    JOptionPane.showMessageDialog(
-                            parentComponent,
-                            "Data produk sudah ada, silakan di-update!",
-                            "Add Product",
-                            JOptionPane.WARNING_MESSAGE
-                    );
-                } else {
-                    String insertQuery = "INSERT INTO m_product(product_name, product_desc, product_qty, product_price, is_available) " +
-                            "VALUES (?, ?, ?, ?, ?)";
-
-                    int status = 0;
-                    switch (comboStatus) {
-                        case "Ada":
-                            status = 1;
-                            break;
-                        case "Pre Order":
-                            status = 2;
-                            break;
-                        case "Habis":
-                            status = 0;
-                            break;
-                    }
-
-                    PreparedStatement ps = conn.prepareStatement(insertQuery);
-                    ps.setString(1, textName);
-                    ps.setString(2, textDesc);
-                    ps.setInt(3, Integer.parseInt(textQuantity));
-                    ps.setInt(4, Integer.parseInt(textPrice));
-                    ps.setInt(5, status);
-                    ps.executeUpdate();
-
-                    addProduct(new Product(
-                            textName,
-                            textDesc,
-                            Integer.parseInt(textQuantity),
-                            status,
-                            Integer.parseInt(textPrice)
-                    ));
-                    int index = productList.size() - 1;
-
-                    tableModel.addRow(new Object[]{
-                            productList.get(index).getProduct_name(),
-                            productList.get(index).getProduct_price(),
-                            productList.get(index).getProduct_desc(),
-                            productList.get(index).getProduct_qty(),
-                            productList.get(index).getAvailableStatus()
-                    });
-
-                    JOptionPane.showMessageDialog(
-                            parentComponent,
-                            "Produk berhasil ditambahkan!",
-                            "Admin Page",
-                            JOptionPane.INFORMATION_MESSAGE
-                    );
-                }
-            } else {
-                String insertQuery = "INSERT INTO m_product(product_name, product_desc, product_qty, product_price, is_available) " +
-                        "VALUES (?, ?, ?, ?, ?)";
-
-                int status = 0;
-                switch (comboStatus) {
-                    case "Ada":
-                        status = 1;
-                        break;
-                    case "Pre Order":
-                        status = 2;
-                        break;
-                    case "Habis":
-                        status = 0;
-                        break;
-                }
-
-                PreparedStatement ps = conn.prepareStatement(insertQuery);
-                ps.setString(1, textName);
-                ps.setString(2, textDesc);
-                ps.setInt(3, Integer.parseInt(textQuantity));
-                ps.setInt(4, Integer.parseInt(textPrice));
-                ps.setInt(5, status);
-                ps.executeUpdate();
-
-                addProduct(new Product(
-                        textName,
-                        textDesc,
-                        Integer.parseInt(textQuantity),
-                        status,
-                        Integer.parseInt(textPrice)
-                ));
-                int index = productList.size() - 1;
-
-                tableModel.addRow(new Object[]{
-                        productList.get(index).getProduct_name(),
-                        productList.get(index).getProduct_price(),
-                        productList.get(index).getProduct_desc(),
-                        productList.get(index).getProduct_qty(),
-                        productList.get(index).getAvailableStatus()
-                });
-
-                JOptionPane.showMessageDialog(
-                        parentComponent,
-                        "Produk berhasil ditambahkan!",
-                        "Admin Page",
-                        JOptionPane.INFORMATION_MESSAGE
-                );
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            JOptionPane.showMessageDialog(
-                    parentComponent,
-                    "Gagal menambahkan produk baru! Periksa lagi koneksi Anda!",
-                    "Admin Page",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
-        }
-    }*/
-
-    // Update product data into database
-    /*public void updateProductData(
-            Component parentComponent,
-            String getEditName,
-            String getEditDesc,
-            int getIs_available,
-            int getEditQuantity,
-            int getEditPrice,
-            DefaultTableModel tableModel,
-            String oldProductName
-    ) {
-        try {
-            Connection conn = data.getConnection();
-            String setQuery = "UPDATE m_product "
-                    + "SET product_name=?, product_desc=?, product_qty=?, product_price=?, is_available=? "
-                    + "WHERE product_name=?";
-
-            PreparedStatement psUpdate = conn.prepareStatement(setQuery);
-
-            psUpdate.setString(1, getEditName);
-            psUpdate.setString(2, getEditDesc);
-            psUpdate.setInt(3, getEditQuantity);
-            psUpdate.setInt(4, getEditPrice);
-            psUpdate.setInt(5, getIs_available);
-            psUpdate.setString(6, oldProductName);
-            int affected = psUpdate.executeUpdate();
-
-            if (affected > 0) {
-                if (getEditQuantity == 0) {
-                    String setStatus = "UPDATE m_product SET is_available = 0 WHERE product_name=?";
-
-                    PreparedStatement pStatus = conn.prepareStatement(setStatus);
-                    pStatus.setString(1, getEditName);
-                    pStatus.executeUpdate();
-                }
-
-                JOptionPane.showMessageDialog(
-                        parentComponent,
-                        "Pengubahan data produk berhasil!",
-                        "Admin Page",
-                        1
-                );
-            }
-            productList.clear();
-
-            tableModel.setRowCount(0);
-            tableModel.fireTableRowsDeleted(0, productList.size());
-            loadProductData(tableModel);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            JOptionPane.showMessageDialog(
-                    parentComponent,
-                    "Gagal melakukan perubahan! Periksa lagi koneksi Anda!",
-                    "Admin Page",
-                    JOptionPane.ERROR_MESSAGE
-            );
-        }
-    }*/
-
-    // Delete product data into database
-    /*public void deleteProductData(
-            Component parentComponent,
-            String productName,
-            DefaultTableModel tableModel
-    ) {
-        try {
-            Connection conn = data.getConnection();
-            String removeForeignKeyCheck = "SET foreign_key_checks = 0";
-
-            Statement st = conn.createStatement();
-            st.executeQuery(removeForeignKeyCheck);
-
-            String removeQuery = "DELETE FROM m_product WHERE product_name=?";
-
-            PreparedStatement psDel = conn.prepareStatement(removeQuery);
-            psDel.setString(1, productName);
-            int affected = psDel.executeUpdate();
-
-            if (affected > 0) {
-                JOptionPane.showMessageDialog(
-                        parentComponent,
-                        "Penghapusan data produk berhasil!",
-                        "Admin Page",
-                        1
-                );
-            }
-            productList.clear();
-
-            tableModel.setRowCount(0);
-            tableModel.fireTableRowsDeleted(0, productList.size());
-            loadProductData(tableModel);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            JOptionPane.showMessageDialog(
-                    parentComponent,
-                    "Gagal melakukan perubahan! Periksa lagi koneksi Anda!",
-                    "Admin Page",
-                    JOptionPane.ERROR_MESSAGE
-            );
-        }
-    }*/
 
     public void addUser(User user) {
         userList.add(user);
-    }
-
-    public void addProduct(Product product) {
-        productList.add(product);
-    }
-    public void loadProductData() {
-        try {
-            Connection conn = data.getConnection();
-            String query = "SELECT * FROM m_product";
-
-            Statement state = conn.createStatement();
-            ResultSet rset = state.executeQuery(query);
-
-            while (rset.next()) {
-                int productCode = rset.getInt("id");
-                String productName = rset.getString("product_name");
-                String productDesc = rset.getString("product_desc");
-                int productPrice = rset.getInt("product_price");
-                int productStatus = rset.getInt("is_available");
-
-                addProduct(new Product(
-                        productCode, productName,
-                        productDesc,
-                        productStatus,
-                        productPrice
-                ));
-
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            System.out.println("Gagal memuat data produk!");
-        }
-    }
-
-    public void addOrders(Order order) {
-        orderList.add(order);
-    }
-
-    // Go to login
-    public void goToLogin(JFrame jFrame) {
-        Login login = new Login();
-
-        jFrame.dispose();
-        login.setVisible(true);
     }
 
     public ArrayList<User> getUserList() {
@@ -414,4 +188,6 @@ public abstract class Controller {
             );
         }
     }
+
+
 }
