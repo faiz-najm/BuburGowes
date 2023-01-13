@@ -49,7 +49,6 @@ public class Register extends javax.swing.JFrame {
         tfRegisterUsername = new javax.swing.JTextField();
         tfRegisterPassword = new javax.swing.JPasswordField();
         tfRegisterCPassword = new javax.swing.JPasswordField();
-        tfRegisterNomorHP = new javax.swing.JPasswordField();
         btnDaftar = new javax.swing.JButton();
         jLabelJudul = new javax.swing.JLabel();
         jLabelName = new javax.swing.JLabel();
@@ -59,6 +58,7 @@ public class Register extends javax.swing.JFrame {
         jLabelCPass = new javax.swing.JLabel();
         jLabelPass = new javax.swing.JLabel();
         jLabelNomorHP = new javax.swing.JLabel();
+        tfRegisterNomorHP = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(235, 233, 176));
@@ -103,12 +103,6 @@ public class Register extends javax.swing.JFrame {
         tfRegisterPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tfRegisterPasswordActionPerformed(evt);
-            }
-        });
-
-        tfRegisterNomorHP.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfRegisterNomorHPActionPerformed(evt);
             }
         });
 
@@ -177,7 +171,7 @@ public class Register extends javax.swing.JFrame {
                             .addComponent(jLabelCPass, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(18, 18, 18)
                             .addComponent(tfRegisterCPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createSequentialGroup()
                             .addComponent(jLabelNomorHP, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(18, 18, 18)
                             .addComponent(tfRegisterNomorHP, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -221,7 +215,7 @@ public class Register extends javax.swing.JFrame {
                     .addComponent(jLabelNomorHP))
                 .addGap(18, 18, 18)
                 .addComponent(btnDaftar)
-                .addGap(18, 18, 18)
+                .addGap(72, 72, 72)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabelLogin)
                     .addComponent(labelToLogin))
@@ -315,10 +309,6 @@ public class Register extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_tfRegisterPasswordActionPerformed
 
-    private void tfRegisterNomorHPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfRegisterNomorHPActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tfRegisterNomorHPActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -371,7 +361,7 @@ public class Register extends javax.swing.JFrame {
     private javax.swing.JLabel labelToLogin;
     private javax.swing.JPasswordField tfRegisterCPassword;
     private javax.swing.JTextField tfRegisterNama;
-    private javax.swing.JPasswordField tfRegisterNomorHP;
+    private javax.swing.JTextField tfRegisterNomorHP;
     private javax.swing.JPasswordField tfRegisterPassword;
     private javax.swing.JTextField tfRegisterUsername;
     // End of variables declaration//GEN-END:variables

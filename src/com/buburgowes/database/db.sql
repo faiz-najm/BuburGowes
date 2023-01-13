@@ -61,3 +61,11 @@ create table m_orderdetails
 create index id_m_user
     on m_orders (id_m_user);
 
+INSERT INTO db_pbo_buburgowes.m_user (user_username, user_fullname, user_pass, user_address, user_phone, user_type, auth_token, status, user_saldo) VALUES ('user', 'User', '12345678', '', '09876654321', 2, 0, 1, 0);
+INSERT INTO db_pbo_buburgowes.m_user (user_username, user_fullname, user_pass, user_address, user_phone, user_type, auth_token, status, user_saldo) VALUES ('admin', 'Admin', '12345678', '', '09876654321', 1, 7969398, 1, 0);
+
+INSERT INTO db_pbo_buburgowes.m_product (id, product_name, product_desc, product_price, is_available) VALUES (1, 'Bubur Polos', 'Beuh Mantap', 7000, 1);
+INSERT INTO db_pbo_buburgowes.m_product (id, product_name, product_desc, product_price, is_available) VALUES (2, 'Bubur Ayam', 'Wenaaak', 12000, 1);
+INSERT INTO db_pbo_buburgowes.m_product (id, product_name, product_desc, product_price, is_available) VALUES (3, 'Bubur Ayam Ati Ampela', 'Bergizi Dan Sehat', 15000, 1);
+
+

@@ -169,7 +169,7 @@
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Component id="tfRegisterCPassword" min="-2" pref="184" max="-2" attributes="0"/>
                               </Group>
-                              <Group type="102" alignment="0" attributes="0">
+                              <Group type="102" alignment="1" attributes="0">
                                   <Component id="jLabelNomorHP" min="-2" pref="135" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Component id="tfRegisterNomorHP" min="-2" pref="184" max="-2" attributes="0"/>
@@ -225,7 +225,7 @@
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="btnDaftar" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="72" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabelLogin" min="-2" max="-2" attributes="0"/>
                           <Component id="labelToLogin" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -278,11 +278,6 @@
               </Events>
             </Component>
             <Component class="javax.swing.JPasswordField" name="tfRegisterCPassword">
-            </Component>
-            <Component class="javax.swing.JPasswordField" name="tfRegisterNomorHP">
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfRegisterNomorHPActionPerformed"/>
-              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnDaftar">
               <Properties>
@@ -367,6 +362,8 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Nomor Telephone"/>
               </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="tfRegisterNomorHP">
             </Component>
           </SubComponents>
         </Container>
