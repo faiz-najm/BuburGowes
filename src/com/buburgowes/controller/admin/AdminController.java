@@ -48,17 +48,20 @@ public class AdminController extends Controller {
 
         try {
             Connection conn = data.getConnection();
-            String getQuery = "SELECT *\n" +
-                    "FROM m_orders\n";
+            String getQuery = """
+                    SELECT *
+                    FROM m_orders
+                    """;
 
             Statement state = conn.createStatement();
             ResultSet rset = state.executeQuery(getQuery);
 
-            String orderNumber;
+            String orderNumber, orderAddress;
 
             while (rset.next()) {
                 orderNumber = rset.getString("orderNumber");
-                addOrders(new Order(orderNumber));
+                orderAddress = rset.getString("alamat");
+                addOrders(new Order(orderNumber, orderAddress));
             }
 
             for (Order tempOrder : getOrderList()) {
@@ -119,13 +122,15 @@ public class AdminController extends Controller {
             Statement state = conn.createStatement();
             ResultSet rset = state.executeQuery(getQuery);
 
-            String orderNumber;
+            String orderNumber, orderAddress;
             int idUser = 0;
 
             while (rset.next()) {
                 orderNumber = rset.getString("orderNumber");
                 idUser = rset.getInt("id_m_user");
-                addOrders(new Order(orderNumber));
+                ;
+                orderAddress = rset.getString("alamat");
+                addOrders(new Order(orderNumber, orderAddress));
             }
 
             for (Order order : getOrderList()) {
@@ -388,7 +393,9 @@ public class AdminController extends Controller {
             PreparedStatement psDel = conn.prepareStatement(removeQuery);
             psDel.setString(1, productName);
 
+
             if (psDel.executeUpdate() > 0) {
+                loadProductTabel();
                 JOptionPane.showMessageDialog(
                         parentComponent,
                         "Penghapusan data produk berhasil!",
@@ -396,7 +403,6 @@ public class AdminController extends Controller {
                         1
                 );
             }
-            loadProductTabel();
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());

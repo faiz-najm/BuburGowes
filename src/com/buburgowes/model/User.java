@@ -5,34 +5,34 @@ package com.buburgowes.model;
  */
 public abstract class User {
 
-    protected int user_id;
-    protected String user_username;
-    protected String user_fullName;
-    protected String user_pass;
-    protected String user_address;
-    protected String user_phoneNumber;
+    protected int userId;
+    protected String userUsername;
+    protected String userFullName;
+    protected String userPass;
+    protected String userAddress;
+    protected String userPhoneNumber;
     protected int user_type;
     protected int user_token, status;
 
     public User(String current_user) {
-        this.user_username = current_user;
+        this.userUsername = current_user;
     }
 
-    public User(int user_id,
-                String user_username,
-                String user_fullName,
-                String user_pass,
-                String user_address,
-                String user_phoneNumber,
+    public User(int userId,
+                String userUsername,
+                String userFullName,
+                String userPass,
+                String userAddress,
+                String userPhoneNumber,
                 int user_type,
                 int user_token,
                 int status) {
-        this.user_id = user_id;
-        this.user_username = user_username;
-        this.user_fullName = user_fullName;
-        this.user_pass = user_pass;
-        this.user_address = user_address;
-        this.user_phoneNumber = user_phoneNumber;
+        this.userId = userId;
+        this.userUsername = userUsername;
+        this.userFullName = userFullName;
+        this.userPass = userPass;
+        this.userAddress = userAddress;
+        this.userPhoneNumber = userPhoneNumber;
         this.user_type = user_type;
         this.user_token = user_token;
         this.status = status;
@@ -88,24 +88,24 @@ public abstract class User {
         return result;
     }
 
-    public String getUser_username() {
-        return user_username;
+    public String getUserUsername() {
+        return userUsername;
     }
 
-    public String getUser_fullName() {
-        return user_fullName;
+    public String getUserFullName() {
+        return userFullName;
     }
 
-    public String getUser_address() {
-        return user_address;
+    public String getUserAddress() {
+        return userAddress;
     }
 
-    public String getUser_phoneNumber() {
-        return user_phoneNumber;
+    public String getUserPhoneNumber() {
+        return userPhoneNumber;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public int getUserId() {
+        return userId;
     }
 }
 

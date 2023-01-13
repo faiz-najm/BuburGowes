@@ -11,28 +11,28 @@ public class Customer extends User {
 
     public Customer(String user_name) {
         super(user_name);
-        this.user_username = user_name;
+        this.userUsername = user_name;
     }
 
     public Customer(int id,
-                    String user_username,
-                    String user_fullName,
-                    String user_pass,
-                    String user_address,
-                    String user_phoneNumber,
-                    int user_type,
-                    int user_token,
+                    String userUsername,
+                    String userFullName,
+                    String userPass,
+                    String userAddress,
+                    String userPhoneNumber,
+                    int userType,
+                    int userToken,
                     int status,
                     int saldo
     ) {
         super(id,
-                user_username,
-                user_fullName,
-                user_pass,
-                user_address,
-                user_phoneNumber,
-                user_type,
-                user_token,
+                userUsername,
+                userFullName,
+                userPass,
+                userAddress,
+                userPhoneNumber,
+                userType,
+                userToken,
                 status
         );
 

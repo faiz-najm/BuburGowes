@@ -7,10 +7,13 @@ import java.util.ArrayList;
  */
 public class Order {
     private String orderNumber;
-    private ArrayList<OrderDetail> orderDetails;
 
-    public Order(String orderNumber) {
+    private String alamat;
+
+    private ArrayList<OrderDetail> orderDetails;
+    public Order(String orderNumber , String alamat) {
         this.orderNumber = orderNumber;
+        this.alamat = alamat;
         this.orderDetails = new ArrayList<>();
     }
 
@@ -25,6 +28,10 @@ public class Order {
 
     public ArrayList<OrderDetail> getOrderDetails() {
         return orderDetails;
+    }
+
+    public String getAlamat() {
+        return alamat;
     }
 
     public Order addOrderDetail(OrderDetail orderDetail) {

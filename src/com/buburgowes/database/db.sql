@@ -21,27 +21,26 @@ create table m_user
     user_type     int           not null,
     auth_token    int default 0 not null,
     status        int(1)        not null,
-    user_saldo    int default 0 not null
+    user_saldo    int default 0 not null,
+    constraint m_user_user_username_uindex
+        unique (user_username)
 )
     charset = latin1;
 
 create table m_orders
 (
-    orderNumber     varchar(50) not null
+    orderNumber  varchar(50) not null
         primary key,
-    tanggalPesan    timestamp   null,
-    tanggalDikirim  timestamp   null,
-    tanggalDiterima timestamp   null,
-    comments        text        null,
-    status          varchar(15) null,
-    id_m_user       int         not null,
-
+    tanggalPesan timestamp   null,
+    comments     text        null,
+    alamat       text        null,
+    status       varchar(15) null,
+    id_m_user    int         not null,
     constraint m_orders_ibfk_1
         foreign key (id_m_user) references m_user (id)
             on update cascade
-
 )
-    charset = latin1;
+    charset = latin1;;
 
 create table m_orderdetails
 (
@@ -52,12 +51,12 @@ create table m_orderdetails
     primary key (id_m_orders, id_m_product),
     constraint m_orderdetails_m_product_id_fk
         foreign key (id_m_product) references m_product (id)
-            on update cascade,
+            on update cascade on delete cascade,
     constraint orderdetails_orders_id_fk
         foreign key (id_m_orders) references m_orders (orderNumber)
             on update cascade on delete cascade
 )
-    charset = latin1;
+    charset = latin1;;
 
 create index id_m_user
     on m_orders (id_m_user);

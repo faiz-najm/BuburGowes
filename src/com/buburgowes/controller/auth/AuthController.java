@@ -150,11 +150,11 @@ public class AuthController extends Controller {
             String insertQuery = "INSERT INTO m_user(user_username, user_fullname, user_pass, user_address, user_phone, user_type, auth_token, status) VALUES(?, ?, ?, ?, ?, ?, ?)";
 
             PreparedStatement pstate = conn.prepareStatement(insertQuery);
-            pstate.setString(1, admin.getUser_username().toLowerCase());
-            pstate.setString(1, admin.getUser_fullName());
+            pstate.setString(1, admin.getUserUsername().toLowerCase());
+            pstate.setString(1, admin.getUserFullName());
             pstate.setString(2, textPass);
-            pstate.setString(3, admin.getUser_address());
-            pstate.setString(4, admin.getUser_phoneNumber());
+            pstate.setString(3, admin.getUserAddress());
+            pstate.setString(4, admin.getUserPhoneNumber());
             pstate.setInt(5, admin.getUser_type());
             pstate.setInt(6, admin.getUser_token());
             pstate.setInt(7, 0);
@@ -190,11 +190,11 @@ public class AuthController extends Controller {
                     "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             PreparedStatement pstate = conn.prepareStatement(insertQuery);
-            pstate.setString(1, customer.getUser_username().toLowerCase());
-            pstate.setString(2, customer.getUser_fullName());
+            pstate.setString(1, customer.getUserUsername().toLowerCase());
+            pstate.setString(2, customer.getUserFullName());
             pstate.setString(3, textPass);
-            pstate.setString(4, customer.getUser_address());
-            pstate.setString(5, customer.getUser_phoneNumber());
+            pstate.setString(4, customer.getUserAddress());
+            pstate.setString(5, customer.getUserPhoneNumber());
             pstate.setInt(6, customer.getUser_type());
             pstate.setInt(7, 0);
             pstate.setInt(8, 0);

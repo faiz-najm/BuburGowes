@@ -46,16 +46,17 @@ public class CustomerController extends Controller {
             Connection conn = data.getConnection();
             String getQuery = "SELECT *\n" +
                     "FROM m_orders\n" +
-                    "WHERE id_m_user = " + this.currentUser.getUser_id();
+                    "WHERE id_m_user = " + this.currentUser.getUserId();
 
             Statement state = conn.createStatement();
             ResultSet rset = state.executeQuery(getQuery);
 
-            String orderNumber;
+            String orderNumber, orderAddress;
 
             while (rset.next()) {
                 orderNumber = rset.getString("orderNumber");
-                currentUser.addOrder(new Order(orderNumber));
+                orderAddress = rset.getString("alamat");
+                currentUser.addOrder(new Order(orderNumber, orderAddress));
             }
 
             for (Order order : currentUser.getOrders()) {
@@ -100,9 +101,9 @@ public class CustomerController extends Controller {
                         // overide Object contructor class
                         Object[] data = {
                                 order.getOrderNumber(),
-                                currentUser.getUser_fullName(),
-                                currentUser.getUser_phoneNumber(),
-                                currentUser.getUser_address(),
+                                currentUser.getUserFullName(),
+                                currentUser.getUserPhoneNumber(),
+                                order.getAlamat(),
                                 order.getOrderDetails().get(orderDetailSize).getProduct().getProduct_name(),
                                 order.getOrderDetails().get(orderDetailSize).getJumlahPesanan(),
                                 order.getOrderDetails().get(orderDetailSize).getTotalHarga()
@@ -121,142 +122,138 @@ public class CustomerController extends Controller {
         }
     }
 
-    public void executeOrder(CustomerMain parentComponent, String nama, String noTelp, String alamat, int jumlahBubur1, int jumlahBubur2, int jumlahBubur3) {
-        if (jumlahBubur1 == 0 && jumlahBubur2 == 0 && jumlahBubur3 == 0) {
-            JOptionPane.showMessageDialog(parentComponent, "Anda belum memesan apapun");
-        } else if (nama.isEmpty() || noTelp.isEmpty() || alamat.isEmpty()) {
-            JOptionPane.showMessageDialog(parentComponent, "Mohon lengkapi data diri Anda");
-        } else {
-            try {
-                Connection conn = data.getConnection();
+    public void executeOrder(CustomerMain parentComponent, String alamat, int jumlahBubur1, int jumlahBubur2, int jumlahBubur3) {
+        try {
+            Connection conn = data.getConnection();
 
-                String insertOrder = "INSERT INTO m_orders (orderNumber, tanggalPesan, id_m_user) VALUES (?, ?, ?)";
+            String insertOrder = "INSERT INTO m_orders (orderNumber, tanggalPesan, alamat, id_m_user) VALUES (?, ?, ?, ?)";
 
-                //Generate order number getGeneratedKeys from database and set it to orderNumber
-                PreparedStatement psOrder = conn.prepareStatement(insertOrder, Statement.RETURN_GENERATED_KEYS);
+            //Generate order number getGeneratedKeys from database and set it to orderNumber
+            PreparedStatement psOrder = conn.prepareStatement(insertOrder, Statement.RETURN_GENERATED_KEYS);
 
-                //Get current date and time
-                ZonedDateTime zdt = ZonedDateTime.now(ZoneId.of("Asia/Jakarta"));
-                Timestamp timestamp = Timestamp.valueOf(zdt.toLocalDateTime());
-                String orderNumber = "ORD" + timestamp.toString().replace(" ", "").replace("-", "").replace(":", "").replace(".", "");
+            //Get current date and time
+            ZonedDateTime zdt = ZonedDateTime.now(ZoneId.of("Asia/Jakarta"));
+            Timestamp timestamp = Timestamp.valueOf(zdt.toLocalDateTime());
+            String orderNumber = "ORD" + timestamp.toString().replace(" ", "").replace("-", "").replace(":", "").replace(".", "");
 
-                //Set orderNumber to orderNumber
-                psOrder.setString(1, orderNumber);
-                psOrder.setTimestamp(2, timestamp);
-                psOrder.setInt(3, currentUser.getUser_id());
+            //Set orderNumber to orderNumber
+            psOrder.setString(1, orderNumber);
+            psOrder.setTimestamp(2, timestamp);
+            psOrder.setString(3, alamat);
+            psOrder.setInt(4, currentUser.getUserId());
 
 //                psOrder.setDate(2, Date.valueOf(ZonedDateTime.now(ZoneId.of("Asia/Jakarta")).toLocalDate()));
 
-                psOrder.executeUpdate();
+            psOrder.executeUpdate();
 
-                if (jumlahBubur1 > 0) {
-                    String insertOrderDetail = "INSERT INTO m_orderdetails (id_m_orders, id_m_product, jumlahPesanan, totalHarga) VALUES (?, ?, ?, ?)";
+            if (jumlahBubur1 > 0) {
+                String insertOrderDetail = "INSERT INTO m_orderdetails (id_m_orders, id_m_product, jumlahPesanan, totalHarga) VALUES (?, ?, ?, ?)";
 
-                    int totalHargaBubur = productList.get(0).getProduct_price() * jumlahBubur1;
+                int totalHargaBubur = productList.get(0).getProduct_price() * jumlahBubur1;
 
-                    PreparedStatement psOrderDetail = conn.prepareStatement(insertOrderDetail);
-                    psOrderDetail.setString(1, orderNumber);
-                    psOrderDetail.setInt(2, 1);
-                    psOrderDetail.setInt(3, jumlahBubur1);
-                    psOrderDetail.setInt(4, totalHargaBubur);
+                PreparedStatement psOrderDetail = conn.prepareStatement(insertOrderDetail);
+                psOrderDetail.setString(1, orderNumber);
+                psOrderDetail.setInt(2, 1);
+                psOrderDetail.setInt(3, jumlahBubur1);
+                psOrderDetail.setInt(4, totalHargaBubur);
 
-                    try {
-                        psOrderDetail.executeUpdate();
-                        currentUser.addOrder(new Order(orderNumber).addOrderDetail(
-                                new OrderDetail(jumlahBubur1,
-                                        totalHargaBubur,
-                                        productList.get(0))));
+                try {
+                    psOrderDetail.executeUpdate();
+                    currentUser.addOrder(new Order(orderNumber, alamat).addOrderDetail(
+                            new OrderDetail(jumlahBubur1,
+                                    totalHargaBubur,
+                                    productList.get(0))));
 
-                        tabelModel.addRow(new Object[]{
-                                orderNumber,
-                                currentUser.getUser_fullName(),
-                                currentUser.getUser_phoneNumber(),
-                                currentUser.getUser_address(),
-                                productList.get(0).getProduct_name(),
-                                jumlahBubur1,
-                                totalHargaBubur
-                        });
+                    tabelModel.addRow(new Object[]{
+                            orderNumber,
+                            currentUser.getUserFullName(),
+                            currentUser.getUserPhoneNumber(),
+                            alamat,
+                            productList.get(0).getProduct_name(),
+                            jumlahBubur1,
+                            totalHargaBubur
+                    });
 
-                    } catch (SQLException e) {
-                        conn.rollback();
-                        System.out.println(e.getMessage());
-                    }
+                } catch (SQLException e) {
+                    conn.rollback();
+                    System.out.println(e.getMessage());
                 }
-
-                if (jumlahBubur2 > 0) {
-                    String insertOrderDetail = "INSERT INTO m_orderdetails (id_m_orders, id_m_product, jumlahPesanan, totalHarga) VALUES (?, ?, ?, ?)";
-
-                    int totalHargaBubur = productList.get(1).getProduct_price() * jumlahBubur2;
-
-
-                    PreparedStatement psOrderDetail = conn.prepareStatement(insertOrderDetail);
-                    psOrderDetail.setString(1, orderNumber);
-                    psOrderDetail.setInt(2, 2);
-                    psOrderDetail.setInt(3, jumlahBubur2);
-                    psOrderDetail.setInt(4, totalHargaBubur);
-
-                    try {
-                        psOrderDetail.executeUpdate();
-                        currentUser.addOrder(new Order(orderNumber).addOrderDetail(
-                                new OrderDetail(jumlahBubur2,
-                                        totalHargaBubur,
-                                        productList.get(2))));
-
-                        tabelModel.addRow(new Object[]{
-                                orderNumber,
-                                currentUser.getUser_fullName(),
-                                currentUser.getUser_phoneNumber(),
-                                currentUser.getUser_address(),
-                                productList.get(1).getProduct_name(),
-                                jumlahBubur2,
-                                totalHargaBubur
-                        });
-                    } catch (SQLException e) {
-                        conn.rollback();
-                        System.out.println(e.getMessage());
-                    }
-                }
-
-                if (jumlahBubur3 > 0) {
-                    String insertOrderDetail = "INSERT INTO m_orderdetails (id_m_orders, id_m_product, jumlahPesanan, totalHarga) VALUES (?, ?, ?, ?)";
-
-                    int totalHargaBubur = productList.get(2).getProduct_price() * jumlahBubur3;
-
-                    PreparedStatement psOrderDetail = conn.prepareStatement(insertOrderDetail);
-                    psOrderDetail.setString(1, orderNumber);
-                    psOrderDetail.setInt(2, 3);
-                    psOrderDetail.setInt(3, jumlahBubur3);
-                    psOrderDetail.setInt(4, totalHargaBubur);
-
-                    // jika gagal menginsert data ke table m_orderdetails maka akan rollback data yang sudah diinsert ke table m_orders
-                    try {
-                        psOrderDetail.executeUpdate();
-                        currentUser.addOrder(new Order(orderNumber).addOrderDetail(
-                                new OrderDetail(jumlahBubur1,
-                                        totalHargaBubur,
-                                        productList.get(2))));
-                        tabelModel.addRow(new Object[]{
-                                orderNumber,
-                                currentUser.getUser_fullName(),
-                                currentUser.getUser_phoneNumber(),
-                                currentUser.getUser_address(),
-                                productList.get(2).getProduct_name(),
-                                jumlahBubur3,
-                                totalHargaBubur
-                        });
-                    } catch (SQLException e) {
-                        conn.rollback();
-                        System.out.println(e.getMessage());
-                    }
-                }
-                // jika berhasil menginsert data ke table m_orderdetails maka akan commit data yang sudah diinsert ke table m_orders
-                JOptionPane.showMessageDialog(parentComponent, "Pesanan Anda berhasil diproses");
-
-
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
             }
+
+            if (jumlahBubur2 > 0) {
+                String insertOrderDetail = "INSERT INTO m_orderdetails (id_m_orders, id_m_product, jumlahPesanan, totalHarga) VALUES (?, ?, ?, ?)";
+
+                int totalHargaBubur = productList.get(1).getProduct_price() * jumlahBubur2;
+
+
+                PreparedStatement psOrderDetail = conn.prepareStatement(insertOrderDetail);
+                psOrderDetail.setString(1, orderNumber);
+                psOrderDetail.setInt(2, 2);
+                psOrderDetail.setInt(3, jumlahBubur2);
+                psOrderDetail.setInt(4, totalHargaBubur);
+
+                try {
+                    psOrderDetail.executeUpdate();
+                    currentUser.addOrder(new Order(orderNumber, alamat).addOrderDetail(
+                            new OrderDetail(jumlahBubur2,
+                                    totalHargaBubur,
+                                    productList.get(2))));
+
+                    tabelModel.addRow(new Object[]{
+                            orderNumber,
+                            currentUser.getUserFullName(),
+                            currentUser.getUserPhoneNumber(),
+                            alamat,
+                            productList.get(1).getProduct_name(),
+                            jumlahBubur2,
+                            totalHargaBubur
+                    });
+                } catch (SQLException e) {
+                    conn.rollback();
+                    System.out.println(e.getMessage());
+                }
+            }
+
+            if (jumlahBubur3 > 0) {
+                String insertOrderDetail = "INSERT INTO m_orderdetails (id_m_orders, id_m_product, jumlahPesanan, totalHarga) VALUES (?, ?, ?, ?)";
+
+                int totalHargaBubur = productList.get(2).getProduct_price() * jumlahBubur3;
+
+                PreparedStatement psOrderDetail = conn.prepareStatement(insertOrderDetail);
+                psOrderDetail.setString(1, orderNumber);
+                psOrderDetail.setInt(2, 3);
+                psOrderDetail.setInt(3, jumlahBubur3);
+                psOrderDetail.setInt(4, totalHargaBubur);
+
+                // jika gagal menginsert data ke table m_orderdetails maka akan rollback data yang sudah diinsert ke table m_orders
+                try {
+                    psOrderDetail.executeUpdate();
+                    currentUser.addOrder(new Order(orderNumber, alamat).addOrderDetail(
+                            new OrderDetail(jumlahBubur1,
+                                    totalHargaBubur,
+                                    productList.get(2))));
+                    tabelModel.addRow(new Object[]{
+                            orderNumber,
+                            currentUser.getUserFullName(),
+                            currentUser.getUserPhoneNumber(),
+                            alamat,
+                            productList.get(2).getProduct_name(),
+                            jumlahBubur3,
+                            totalHargaBubur
+                    });
+                } catch (SQLException e) {
+                    conn.rollback();
+                    System.out.println(e.getMessage());
+                }
+            }
+            // jika berhasil menginsert data ke table m_orderdetails maka akan commit data yang sudah diinsert ke table m_orders
+            JOptionPane.showMessageDialog(parentComponent, "Pesanan Anda berhasil diproses");
+
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
+
     }
 
     public void cancelOrderData(
@@ -276,9 +273,9 @@ public class CustomerController extends Controller {
 
             if (psDel.executeUpdate() > 0) {
                 loadOrderTabel();
-                JOptionPane.showMessageDialog(parentComponent, "Pesanan Anda berhasil dibatalkan");
+                JOptionPane.showMessageDialog(parentComponent, "Pesanan Anda dibatalkan");
             } else {
-                JOptionPane.showMessageDialog(parentComponent, "Pesanan Anda gagal dibatalkan");
+                JOptionPane.showMessageDialog(parentComponent, "Pesanan tidak dapat dibatalkan");
             }
 
 //            productList.clear();
