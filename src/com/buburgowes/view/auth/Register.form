@@ -225,7 +225,7 @@
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="btnDaftar" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="72" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabelLogin" min="-2" max="-2" attributes="0"/>
                           <Component id="labelToLogin" alignment="0" min="-2" max="-2" attributes="0"/>

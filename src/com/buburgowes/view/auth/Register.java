@@ -215,7 +215,7 @@ public class Register extends javax.swing.JFrame {
                     .addComponent(jLabelNomorHP))
                 .addGap(18, 18, 18)
                 .addComponent(btnDaftar)
-                .addGap(72, 72, 72)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabelLogin)
                     .addComponent(labelToLogin))
